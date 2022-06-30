@@ -40,7 +40,17 @@ dependencies:
   sqflite: ^2.0.2+1
   # For Indecator
   smooth_page_indicator: ^1.0.0+2
+  # Svg Image 
+  flutter_svg: ^1.1.0
+  # Slider 
+  carousel_slider: ^4.1.1
+  # Loading Screen 
+  shimmer: ^2.0.0
+  # For likes animation
+  like_button: ^2.0.4
   flutter:
+    sdk: flutter
+  flutter_localizations: # Add this line
     sdk: flutter
   
 

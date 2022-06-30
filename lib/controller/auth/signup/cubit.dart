@@ -4,7 +4,7 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/auth/login/states.dart';
 import 'package:beinmatch/controller/auth/signup/states.dart';
-import 'package:beinmatch/view/home/test.dart';
+import 'package:beinmatch/view/home/home_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -51,16 +51,14 @@ class SignUpCubit extends Cubit<SignUpState> {
          */
       } catch (e) {
         if (e is DioError) {
-          print(e.response!.data['errors']['email'][0]);
-          if(e.response!.data['errors']['email'] != null){
+          
             /**
              * If The Email Error is orady is exists
              */
             Components.snakBar(
                 context: context,
-                text: e.response!.data['errors']['email'][0],
+                text: e.response!.data['message'],
                 color: Color(Config.errorColor));
-          }else{
             /**
              * Show Message Any Error Api Call
              */
@@ -68,7 +66,6 @@ class SignUpCubit extends Cubit<SignUpState> {
               context: context,
               text: e.response!.data['message'],
               color: Color(Config.errorColor));
-          }
           emit(SignUpError());
         } else {
           /**

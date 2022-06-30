@@ -8,8 +8,14 @@ class Config {
   // Setting For Style
   static int primaryColor = 0xFF07499F;
   static int secondaryColor = 0xFFD9A20A;
+  // For like , love ..
+  static int unActiveColor = 0xFFDCDCDC;
+  
   static int errorColor = 0xFFCD0000;
+  static Color baseColor = Color(0xFFBCBCBC);
+  static Color highlightColor = Color.fromRGBO(206, 206, 206, 1);
   static const String primaryFont = "Tajawal";
+  static String placeholderImage = 'assets/imgs/plcImg_load.png';
 
   // Data For OnBording Screen
   static List<onBordingController> onbordData = [

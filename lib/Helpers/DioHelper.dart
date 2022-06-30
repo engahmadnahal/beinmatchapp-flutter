@@ -1,4 +1,5 @@
 import 'package:beinmatch/Helpers/config.dart';
+import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -27,6 +28,10 @@ class DioHelper {
   static Future<Response>? getData({
     @required String? url,
   }) async {
+    dio!.options.headers = {
+      'Authorization': 'Bearer ${SheardHelper.getData("token")}',
+      'Accept': 'application/json',
+    };
     return await dio!.get(url!);
   }
 
@@ -35,6 +40,7 @@ class DioHelper {
     @required Map<String, dynamic>? data,
   }) async {
     dio!.options.headers = {
+      'Authorization' : 'Bearer ${SheardHelper.getData("token")}',
       'Accept': 'application/json',
     };
 

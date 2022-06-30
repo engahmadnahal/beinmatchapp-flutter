@@ -3,15 +3,22 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/auth/login/cubit.dart';
+import 'package:beinmatch/controller/home/news/cubit.dart';
+import 'package:beinmatch/controller/home/news/stats.dart';
+import 'package:beinmatch/main/States.dart';
+import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:beinmatch/view/auth/auth_signup.dart';
-import 'package:beinmatch/view/home/test.dart';
+import 'package:beinmatch/view/home/home_screen.dart';
+import 'package:beinmatch/view/home/news/news_home.dart';
+import 'package:beinmatch/view/home/news/news_single.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,14 +59,39 @@ class MyApp extends StatelessWidget {
       statusBarBrightness: Brightness.dark,
     ));
 
-    return MaterialApp(
-      title: 'Bein Match',
-      debugShowCheckedModeBanner: true,
-      theme:
-          ThemeData(primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
-      home: Directionality(
-        textDirection: TextDirection.rtl,
-        child: AuthSignUp(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AppCubit()),
+        BlocProvider(create: (context) => NewsCubit()..getNews())
+      ],
+      child: BlocConsumer<AppCubit, AppState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return MaterialApp(
+            /**
+             * Localizations are a way to make your app support multiple languages.
+             * And Change Diraction to RTL to support RTL languages.
+             */
+            localizationsDelegates: const [
+              GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const  [
+              Locale('ar', 'AE'), 
+            ],
+            locale: const Locale('ar', 'AE'), 
+            title: 'Bein Match',
+            debugShowCheckedModeBanner: true,
+            theme: ThemeData(
+                primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
+            home: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Home(),
+            ),
+          );
+
+        },
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/auth/login/states.dart';
-import 'package:beinmatch/view/home/test.dart';
+import 'package:beinmatch/view/home/home_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
