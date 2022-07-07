@@ -11,18 +11,20 @@ class Post{
   int? dislikes;
   int? views;
   Comment? comments;
+  Like Likes;
   Post({
-    this.id,
-    this.title,
-    this.thumnail,
-    this.body,
-    this.created_at,
-    this.employee,
-    this.dawry,
-    this.likes,
-    this.dislikes,
-    this.views,
-    this.comments
+   required this.id,
+   required this.title,
+   required this.thumnail,
+   required this.body,
+   required this.created_at,
+   required this.employee,
+   required this.dawry,
+   required this.likes,
+   required this.dislikes,
+   required this.views,
+   required this.comments,
+    required this.Likes
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -37,7 +39,8 @@ class Post{
       likes: json['likes'],
       dislikes: json['dislikes'],
       views: json['views'],
-      comments: Comment.fromJson(json['comments'])
+      comments: Comment.fromJson(json['comments']),
+      Likes : Like.fromJson(json['user_likes'])
     );
   }
 }
@@ -120,4 +123,27 @@ class User {
     avater: json["avater"],
     // created_at : json["created_at"]
   );
+}
+
+class Like {
+  late int user_id;
+  late bool isLike;
+  List<Like> likes = [];
+
+  Like({
+     required this.user_id,
+      required this.isLike
+  });
+  /// Reseved A List Of Map
+  Like.fromJson(List<dynamic> json){
+    /// For loop in all List and init instanc variable
+    if(json.isNotEmpty){
+      json.forEach((element) {
+        likes.add(Like(
+            user_id : element['user_id'],
+            isLike : element['is_like']
+        ));
+      });
+    }
+  }
 }

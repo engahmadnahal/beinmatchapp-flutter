@@ -1,24 +1,36 @@
 import 'package:beinmatch/Helpers/config.dart';
+import 'package:beinmatch/controller/home/main/cubit.dart';
+import 'package:beinmatch/main/cubit.dart';
+import 'package:beinmatch/view/box_message/box_message.dart';
+import 'package:beinmatch/view/main/main_layout.dart';
+import 'package:beinmatch/view/search/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Components {
   static List<Widget>? appBarActions({
+    required context,
     var color,
   }) =>
       [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            navigator(context: context, screen: Search());
+          },
           icon: Icon(Icons.search),
           color: color ??= Color(Config.primaryColor),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            navigator(context: context, screen: BoxMsg());
+          },
           icon: Icon(Icons.notification_add_outlined),
           color: color ??= Color(Config.primaryColor),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            AppCubit.get(context).openDrawer(context);
+          },
           icon: Icon(Icons.menu),
           color: color ??= Color(Config.primaryColor),
         ),
@@ -43,7 +55,8 @@ class Components {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Components.customeImage(url: image,
+                child: Components.customeImage(
+                  url: image,
                   w: MediaQuery.of(context).size.width / 3,
                   h: 120,
                 ),
@@ -126,6 +139,13 @@ class Components {
     );
   }
 
+  static Future navigatorReplace({@required var context, @required var screen}) {
+    return Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
+
   static Widget textButton({
     @required String? text,
     @required Function()? onPressed,
@@ -165,9 +185,8 @@ class Components {
     double? w,
     double? h,
   }) {
-
     dynamic imgWidget;
-    try{
+    try {
       imgWidget = FadeInImage(
         width: w ??= double.infinity,
         height: h ??= double.infinity,
@@ -177,7 +196,7 @@ class Components {
           '${url}',
         ),
       );
-    }catch(error){
+    } catch (error) {
       FadeInImage(
         width: w ??= double.infinity,
         height: h ??= double.infinity,
@@ -187,5 +206,241 @@ class Components {
       );
     }
     return imgWidget;
+  }
+
+  static Widget matchesComponent(
+      {required context,
+      required logo1,
+      required logo2,
+      required name1,
+      required name2,
+      required statusMatch}) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 20,
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black26,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(3)),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: FadeInImage.assetNetwork(
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.cover,
+                    placeholder: Config.placeholderImage,
+                    image: logo1,
+                  ).image,
+                  radius: 30,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  name1,
+                  style: TextStyle(
+                      color: Color(Config.primaryColor),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              color: Color(Config.primaryColor),
+              child: Center(
+                child: Text(
+                  statusMatch,
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  name2,
+                  style: TextStyle(
+                      color: Color(Config.primaryColor),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  backgroundImage: FadeInImage.assetNetwork(
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.cover,
+                    placeholder: Config.placeholderImage,
+                    image: logo2,
+                  ).image,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget tableViewData({
+    required String? orderd,
+    required String? name,
+    required String? logo,
+    required String? playing,
+    required String? woner,
+    required String? draw,
+    required String? gameOver,
+    required String? defirance,
+    required String? points,
+    dynamic color = Colors.white,
+  }) {
+    return Container(
+      color: color,
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$orderd',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: FadeInImage(
+                      placeholder: AssetImage(Config.placeholderImage),
+                      image: NetworkImage('$logo'),
+                      fit: BoxFit.contain,
+                      width: 30,
+                      height: 30,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5,),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: Text(
+                      '$name',
+                      style: TextStyle(
+                          color: Color(Config.primaryColor),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$playing',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$woner',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$draw',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$gameOver',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$defirance',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Text(
+                '$points',
+                style: TextStyle(
+                    color: Color(Config.primaryColor),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

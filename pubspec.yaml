@@ -48,6 +48,10 @@ dependencies:
   shimmer: ^2.0.0
   # For likes animation
   like_button: ^2.0.4
+  # FontsAwsem
+  font_awesome_flutter: ^10.1.0
+  # Refresh Indecator Liquid animation
+  liquid_pull_to_refresh: ^3.0.1
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

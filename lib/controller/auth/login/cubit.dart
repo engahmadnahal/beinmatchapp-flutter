@@ -3,7 +3,7 @@ import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/auth/login/states.dart';
-import 'package:beinmatch/view/home/home_screen.dart';
+import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ class LoginCubit extends Cubit<LoginState> {
   static LoginCubit get(context) => BlocProvider.of(context);
 
   void login(context, var formKey, String email, String password) async {
+    emit(LoginLoading());
     /**
      * Validate TextFields 
      * In FormKey, we can get the current state of the form
@@ -38,8 +39,9 @@ class LoginCubit extends Cubit<LoginState> {
           },
         );
         await SheardHelper.setData('token', response!.data['data']['token']);
+        await SheardHelper.setData('userInfo', response.data['data']);
         formKey.currentState.save();
-        Components.navigator(context: context, screen: Home());
+        Components.navigatorReplace(context: context, screen: MainLayout());
         emit(LoginSuccess());
 
         /**

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
+import 'package:beinmatch/Helpers/LoggerHelper.dart';
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/auth/login/states.dart';
 import 'package:beinmatch/controller/auth/signup/states.dart';
 import 'package:beinmatch/view/home/home_screen.dart';
+import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +20,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   static SignUpCubit get(context) => BlocProvider.of(context);
 
   void signUp(context, var formKey, String fname,String lname, String email, String password) async {
+    emit(SignUpLoading());
     /**
      * Validate TextFields 
      * In FormKey, we can get the current state of the form
@@ -40,18 +45,23 @@ class SignUpCubit extends Cubit<SignUpState> {
             'password': password,
           },
         );
-        await SheardHelper.setData('token', response!.data['data']['token']);
+        print("heeer 0");
+        /// Store Map<> For All User Data , using [Json encode]
+        String data = json.encode(response!.data['data']);
+        print("heeer 1");
+        await SheardHelper.setData('userInfo', data);
+        print("heeer 2");
+        print("heeer 3");
         formKey.currentState.save();
-        Components.navigator(context: context, screen: Home());
+        Components.navigatorReplace(context: context, screen: MainLayout());
         emit(SignUpSuccess());
-
         /**
          * If The User Not Exist, We Can Show Error Message On Catch Error 
          * Because The Error Is From Api Call Http Requset [400] Bad Request
          */
       } catch (e) {
         if (e is DioError) {
-          
+          print(e.message);
             /**
              * If The Email Error is orady is exists
              */
@@ -59,13 +69,6 @@ class SignUpCubit extends Cubit<SignUpState> {
                 context: context,
                 text: e.response!.data['message'],
                 color: Color(Config.errorColor));
-            /**
-             * Show Message Any Error Api Call
-             */
-          Components.snakBar(
-              context: context,
-              text: e.response!.data['message'],
-              color: Color(Config.errorColor));
           emit(SignUpError());
         } else {
           /**
@@ -73,7 +76,7 @@ class SignUpCubit extends Cubit<SignUpState> {
            * Send For Error Message To Api Log System
            */
           try {
-            DioHelper.postData(url: 'log', data: {'body': e});
+            await LoggerHelper.saveLog(e);
           } catch (er) {}
         }
       }

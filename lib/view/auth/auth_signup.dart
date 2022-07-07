@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthSignUp extends StatelessWidget {
   AuthSignUp({Key? key}) : super(key: key);
-  var formKey = GlobalKey<FormState>();
+  GlobalKey formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController fname = TextEditingController();

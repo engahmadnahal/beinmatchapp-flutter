@@ -1,7 +1,11 @@
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
+import 'package:beinmatch/controller/home/main/cubit.dart';
+import 'package:beinmatch/controller/home/main/stats.dart';
 import 'package:beinmatch/controller/home/news/cubit.dart';
 import 'package:beinmatch/controller/home/news/stats.dart';
+import 'package:beinmatch/main/States.dart';
+import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/errors/get_data.dart';
 import 'package:beinmatch/view/home/news/load_data.dart';
 import 'package:beinmatch/view/home/news/news_single.dart';
@@ -187,17 +191,16 @@ class NewsHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NewsCubit, NewsState>(
+    return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
-       
         /**
          *
          * Check if the state is loading
          *
          */
         
-        if(state is SuccessNewsState){
+        if(state is SuccessNewsState || AppCubit.get(context).posts.isNotEmpty){
           return SingleChildScrollView(
             controller: _sroll,
             physics: BouncingScrollPhysics(),
@@ -211,7 +214,7 @@ class NewsHome extends StatelessWidget {
                   ),
 
                   CarouselSlider(
-                    items: NewsCubit.get(context).getPosts.map((e) {
+                    items: AppCubit.get(context).getPosts.map((e) {
                       return InkWell(
                         onTap: (){
                           Components.navigator(
@@ -329,20 +332,20 @@ class NewsHome extends StatelessWidget {
                     child: ListView.separated(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: NewsCubit.get(context).getPosts.length,
+                      itemCount: AppCubit.get(context).getPosts.length,
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: (){
                             Components.navigator(context: context, screen: NewsSingle(
-                              post: NewsCubit.get(context).getPosts[index],
+                              post: AppCubit.get(context).getPosts[index],
                             ));
                           },
                           child: Components.post(
                             context: context,
-                            image: "${NewsCubit.get(context).getPosts[index].thumnail}",
-                            title: "${NewsCubit.get(context).getPosts[index].title}",
-                            created_at: "${NewsCubit.get(context).getPosts[index].created_at}",
-                            tags: "${NewsCubit.get(context).getPosts[index].dawry!.name}",
+                            image: "${AppCubit.get(context).getPosts[index].thumnail}",
+                            title: "${AppCubit.get(context).getPosts[index].title}",
+                            created_at: "${AppCubit.get(context).getPosts[index].created_at}",
+                            tags: "${AppCubit.get(context).getPosts[index].dawry!.name}",
                           ),
                         );
                       },
@@ -369,10 +372,13 @@ class NewsHome extends StatelessWidget {
               ),
             ),
           );
-        }else if(state is ErrorNewsState){
+        }
+        else if(state is ErrorNewsState){
           return ErrorGetData();
-        }else{
+        }else if(state is LoadingNewsState && AppCubit.get(context).posts.isEmpty){
          return LoadNews();
+        }else{
+          return LoadNews();
         }
       },
     );

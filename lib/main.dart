@@ -2,19 +2,16 @@ import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
-import 'package:beinmatch/controller/auth/login/cubit.dart';
-import 'package:beinmatch/controller/home/news/cubit.dart';
-import 'package:beinmatch/controller/home/news/stats.dart';
+import 'package:beinmatch/controller/home/main/cubit.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
-import 'package:beinmatch/view/auth/auth_signup.dart';
 import 'package:beinmatch/view/home/home_screen.dart';
-import 'package:beinmatch/view/home/news/news_home.dart';
-import 'package:beinmatch/view/home/news/news_single.dart';
+import 'package:beinmatch/view/main/Drawer.dart';
+import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
+import 'package:beinmatch/view/video_match/single_match.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,12 +22,12 @@ void main() async {
   DioHelper.instanc();
   await SheardHelper.init();
   bool? isSkip = SheardHelper.getBool("skipBord");
-  String? token = SheardHelper.getData("token");
+  String? token = SheardHelper.getData("userInfo");
   Widget screen = OnBordingPage();
 
   if (isSkip == true || isSkip != null) {
     if (token != null) {
-      screen = Home();
+      screen = MainLayout();
     } else {
       screen = AuthLogin();
     }
@@ -61,8 +58,8 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit()),
-        BlocProvider(create: (context) => NewsCubit()..getNews())
+        // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
+        BlocProvider(create: (context) => AppCubit()..getNews()),
       ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {},
@@ -87,7 +84,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
             home: Directionality(
               textDirection: TextDirection.rtl,
-              child: Home(),
+              child: screen
             ),
           );
 

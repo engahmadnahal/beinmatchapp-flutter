@@ -1,9 +1,9 @@
+import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
-class DawryHome extends StatelessWidget {
-  DawryHome({Key? key}) : super(key: key);
+class ClubScreen extends StatelessWidget {
+  ClubScreen({Key? key}) : super(key: key);
   List<Map<String, dynamic>> dawry = [
     {
       "id": 1,
@@ -172,22 +172,38 @@ class DawryHome extends StatelessWidget {
       "points": "31"
     }
   ];
-
   @override
   Widget build(BuildContext context) {
-    return LiquidPullToRefresh(
-      color: Color(Config.primaryColor),
-      springAnimationDurationInMilliseconds: 500,
-      onRefresh: () {
-        return Future.delayed(Duration(seconds: 2),() => print("Hello"));
-      },
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-            color: Colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          color: Color(Config.primaryColor),
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          'الفرق الرياضية',
+          style: TextStyle(
+            color: Color(Config.secondaryColor),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: Components.appBarActions(context: context),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(Duration(seconds: 2), () => print("Hello"));
+        },
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Container(
+              color: Colors.white,
               width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +213,7 @@ class DawryHome extends StatelessWidget {
                   ),
                   Container(
                     child: Text(
-                      'الدوريات الرياضية',
+                      'جميع الفرق',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(Config.primaryColor),
@@ -209,8 +225,8 @@ class DawryHome extends StatelessWidget {
                     height: 30,
                   ),
                   ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemCount: dawry.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -236,7 +252,7 @@ class DawryHome extends StatelessWidget {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                          fontSize: 18),
                                     ),
                                   ],
                                 ),
@@ -245,6 +261,9 @@ class DawryHome extends StatelessWidget {
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
+                                      IconButton(onPressed: (){
+
+                                      }, icon: Icon(Icons.favorite_outline,color: Color(Config.primaryColor),),),
                                       Icon(
                                         Icons.arrow_forward_ios,
                                         color: Color(Config.primaryColor),
@@ -260,7 +279,7 @@ class DawryHome extends StatelessWidget {
                           height: 20,
                         );
                       }),
-                 SizedBox(
+                  SizedBox(
                     height: 30,
                   ),
                 ],

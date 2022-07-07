@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:dio/dio.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/cupertino.dart';
  * -----------------------------------------------------------------
  */
 class DioHelper {
+  static Map<String,dynamic> userInfo = json.decode(SheardHelper.getData('userInfo')!);
   static Dio? dio;
   static String urlApi = Config.api_url;
   static BaseOptions options = BaseOptions(
@@ -29,7 +32,7 @@ class DioHelper {
     @required String? url,
   }) async {
     dio!.options.headers = {
-      'Authorization': 'Bearer ${SheardHelper.getData("token")}',
+      'Authorization': 'Bearer ${userInfo['token']}',
       'Accept': 'application/json',
     };
     return await dio!.get(url!);
@@ -40,7 +43,7 @@ class DioHelper {
     @required Map<String, dynamic>? data,
   }) async {
     dio!.options.headers = {
-      'Authorization' : 'Bearer ${SheardHelper.getData("token")}',
+      'Authorization' : 'Bearer ${userInfo['token']}',
       'Accept': 'application/json',
     };
 
