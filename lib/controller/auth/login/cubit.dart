@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
@@ -38,8 +40,8 @@ class LoginCubit extends Cubit<LoginState> {
             'password': password,
           },
         );
-        await SheardHelper.setData('token', response!.data['data']['token']);
-        await SheardHelper.setData('userInfo', response.data['data']);
+        String data = json.encode(response!.data['data']);
+        await SheardHelper.setData('userInfo', data);
         formKey.currentState.save();
         Components.navigatorReplace(context: context, screen: MainLayout());
         emit(LoginSuccess());

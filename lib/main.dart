@@ -3,6 +3,7 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/home/main/cubit.dart';
+import 'package:beinmatch/controller/home/news/single/cubit.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
@@ -58,8 +59,10 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
         BlocProvider(create: (context) => AppCubit()..getNews()),
+        // BlocProvider(create: (context) => SingleNewsCubit()),
+
+        // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
       ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {},

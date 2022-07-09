@@ -45,13 +45,10 @@ class SignUpCubit extends Cubit<SignUpState> {
             'password': password,
           },
         );
-        print("heeer 0");
         /// Store Map<> For All User Data , using [Json encode]
         String data = json.encode(response!.data['data']);
-        print("heeer 1");
         await SheardHelper.setData('userInfo', data);
-        print("heeer 2");
-        print("heeer 3");
+
         formKey.currentState.save();
         Components.navigatorReplace(context: context, screen: MainLayout());
         emit(SignUpSuccess());
@@ -76,7 +73,7 @@ class SignUpCubit extends Cubit<SignUpState> {
            * Send For Error Message To Api Log System
            */
           try {
-            await LoggerHelper.saveLog(e);
+            await LoggerHelper.saveLog(e.toString());
           } catch (er) {}
         }
       }

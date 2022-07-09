@@ -11,7 +11,7 @@ class Post{
   int? dislikes;
   int? views;
   Comment? comments;
-  Like Likes;
+  int isLikes = 2;
   Post({
    required this.id,
    required this.title,
@@ -24,7 +24,7 @@ class Post{
    required this.dislikes,
    required this.views,
    required this.comments,
-    required this.Likes
+    required this.isLikes
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
@@ -40,7 +40,7 @@ class Post{
       dislikes: json['dislikes'],
       views: json['views'],
       comments: Comment.fromJson(json['comments']),
-      Likes : Like.fromJson(json['user_likes'])
+      isLikes :  json['user_like']
     );
   }
 }
@@ -90,8 +90,8 @@ class Comment{
   });
 
    Comment.fromJson(Map<String, dynamic> json) {
-    count = json['count'];
-    if (!json['data'].isEmpty) {
+     // if(json['count'] != null) count = json['count'];
+    if (json['data'].isNotEmpty) {
       json['data'].forEach((element) {
         data.add(Comment(
           idComment: element['id'],
@@ -100,7 +100,6 @@ class Comment{
           created_at: element['created_at']
         ));
       });
-
     }
   } 
 }

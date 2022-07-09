@@ -194,6 +194,7 @@ class NewsHome extends StatelessWidget {
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
       builder: (context, state) {
+        print(state);
         /**
          *
          * Check if the state is loading
