@@ -2,8 +2,8 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
-class DawryHome extends StatelessWidget {
-  DawryHome({Key? key}) : super(key: key);
+class ClubHome extends StatelessWidget {
+  ClubHome({Key? key}) : super(key: key);
   List<Map<String, dynamic>> dawry = [
     {
       "id": 1,
@@ -197,7 +197,7 @@ class DawryHome extends StatelessWidget {
                   ),
                   Container(
                     child: Text(
-                      'الدوريات الرياضية',
+                      'الفرق الرياضية',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(Config.primaryColor),
