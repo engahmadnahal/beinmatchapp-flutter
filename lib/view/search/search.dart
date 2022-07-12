@@ -185,7 +185,7 @@ List<Map<String,dynamic>> posts = [
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -207,7 +207,7 @@ List<Map<String,dynamic>> posts = [
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -287,7 +287,7 @@ List<Map<String,dynamic>> posts = [
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 20,
                 "name": "الدوري الإسباني"
             },
@@ -329,7 +329,7 @@ List<Map<String,dynamic>> posts = [
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -474,7 +474,7 @@ List<Map<String,dynamic>> posts = [
                       image: '${posts[index]["thumnail"]}',
                       title: '${posts[index]["title"]}',
                       created_at: '${posts[index]["created_at"]}',
-                      tags: '${posts[index]["dawry"]["name"]}');
+                      tags: '${posts[index]["clubshome"]["name"]}');
                 },
                 separatorBuilder: (context, index) {
                   return SizedBox(

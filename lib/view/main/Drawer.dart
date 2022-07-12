@@ -4,7 +4,7 @@ import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:beinmatch/view/favorite/favorite.dart';
 import 'package:beinmatch/view/home/clubs/club.dart';
-import 'package:beinmatch/view/home/home_screen.dart';
+import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,10 +12,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DrawerCustom extends StatelessWidget {
   DrawerCustom({Key? key}) : super(key: key);
   List<Map<String, dynamic>> dataDrawer = [
-    {'title': "الرئيسية", 'icon': Icons.home,'screen':Home()},
-    {'title': "أخر الأخبار", 'icon': Icons.newspaper, 'screen': Home()},
+    {'title': "الرئيسية", 'icon': Icons.home,'screen':MainLayout()},
+    {'title': "أخر الأخبار", 'icon': Icons.newspaper, 'screen': MainLayout()},
     {'title': "التفضيلات", 'icon': Icons.favorite_border, 'screen': FavoriteScreen()},
-    {'title': "البطولات", 'icon': Icons.sports_soccer_outlined,'screen':Home()},
+    // {'title': "البطولات", 'icon': Icons.sports_soccer_outlined,'screen':Home()},
     {'title': "الفرق الرياضية", 'icon': Icons.sports_kabaddi_outlined,'screen':ClubScreen()},
     {'title': "الاعدادات", 'icon': Icons.settings_outlined,'screen':SettingScreen()},
     {'title': "خروج", 'icon': Icons.exit_to_app,'screen':AuthLogin()},
@@ -79,7 +79,7 @@ class DrawerCustom extends StatelessWidget {
                           return InkWell(
                             onTap: (){
                               if(index == 6){
-                                SheardHelper.removeData('token');
+                                SheardHelper.removeData('userInfo');
                                 Components.navigator(context: context, screen: dataDrawer[index]['screen']);
                               }else{
                                 Components.navigator(context: context, screen: dataDrawer[index]['screen']);
@@ -107,7 +107,7 @@ class DrawerCustom extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          if(index == dataDrawer.length - 4){
+                          if(index == dataDrawer.length - 5){
                             return Container(
                               margin: EdgeInsets.all(10),
                               width: MediaQuery.of(context).size.width / 3 * 2,

@@ -422,7 +422,7 @@ class NewsSingle extends StatelessWidget {
                                 height: 15,
                               ),
                               if(SingleNewsCubit.get(context).commentPost != null)
-                                commentList(SingleNewsCubit.get(context).commentPost!),
+                                commentList(SingleNewsCubit.get(context).commentPost!,state),
                               SizedBox(
                                 height: 30,
                               ),
@@ -441,8 +441,23 @@ class NewsSingle extends StatelessWidget {
     );
   }
 
-  Widget commentList(Comment coment){
-    print("Comment Count : ${coment.data.length}");
+  Widget commentList(Comment coment,SingleNewsState state){
+
+    List<SingleNewsState> states = [
+      LoadingSendCommentNewsState(),
+      LoadingUpdateCommentNewsState(),
+      LoadingGetCommentNewsState()
+    ];
+
+
+    if(
+    state is LoadingSendCommentNewsState ||
+    state is LoadingUpdateCommentNewsState ||
+    state is LoadingGetCommentNewsState ||
+    state is LoadingDeleteCommentNewsState
+    ){
+      return Center(child: CircularProgressIndicator(color: Color(Config.primaryColor),),);
+    }
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,

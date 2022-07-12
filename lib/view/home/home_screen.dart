@@ -2,11 +2,9 @@ import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/home/main/cubit.dart';
-import 'package:beinmatch/controller/home/main/stats.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
-import 'package:beinmatch/view/auth/auth_login.dart';
-import 'package:beinmatch/view/home/dawry/dawry_home.dart';
+import 'package:beinmatch/view/home/clubshome/club_home.dart';
 import 'package:beinmatch/view/home/match/match_home.dart';
 import 'package:beinmatch/view/home/news/news_home.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +88,7 @@ class Home extends StatelessWidget   {
                     ),
                     Tab(
                       child: Text(
-                        'الدوريات',
+                        'الفرق الرياضية',
                         style: TextStyle(
                             color: Color(Config.primaryColor),
                             fontWeight: FontWeight.bold),
@@ -105,7 +103,7 @@ class Home extends StatelessWidget   {
                   children: [
                     NewsHome(),
                     MatchHome(),
-                    DawryHome(),
+                    ClubHome(),
                   ],
                 ),
               ),

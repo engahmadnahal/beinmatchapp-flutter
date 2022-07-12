@@ -26,7 +26,7 @@ class MatchClub extends StatelessWidget {
         "logo":
             "https://www.yalla-shoot.com/images/upload/images/1376868119.png"
       },
-      "dawry": {
+      "clubshome": {
         "id": 2,
         "name": "دوري أبطال أوروبا",
         "avater":
@@ -60,7 +60,7 @@ class MatchClub extends StatelessWidget {
         "name": "تشيلسي",
         "logo": "https://www.yalla-shoot.com/images/upload/images/889110.png"
       },
-      "dawry": {
+      "clubshome": {
         "id": 2,
         "name": "دوري أبطال أوروبا",
         "avater":
@@ -95,7 +95,7 @@ class MatchClub extends StatelessWidget {
         "logo":
             "https://www.yalla-shoot.com/images/upload/images/1376917301.png"
       },
-      "dawry": {
+      "clubshome": {
         "id": 19,
         "name": "الدوري الإنجليزي",
         "avater":

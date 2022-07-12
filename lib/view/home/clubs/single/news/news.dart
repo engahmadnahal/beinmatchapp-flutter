@@ -17,7 +17,7 @@ class ClubNews extends StatelessWidget {
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -39,7 +39,7 @@ class ClubNews extends StatelessWidget {
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -119,7 +119,7 @@ class ClubNews extends StatelessWidget {
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 20,
                 "name": "الدوري الإسباني"
             },
@@ -161,7 +161,7 @@ class ClubNews extends StatelessWidget {
                 "id": 1,
                 "name": "Admin Admin"
             },
-            "dawry": {
+            "clubshome": {
                 "id": 2,
                 "name": "دوري أبطال أوروبا"
             },
@@ -216,7 +216,7 @@ class ClubNews extends StatelessWidget {
                         created_at:
                             "${posts[index]["created_at"]}",
                         tags:
-                            "${posts[index]["dawry"]["name"]}",
+                            "${posts[index]["clubshome"]["name"]}",
                       ),
                     );
                   },

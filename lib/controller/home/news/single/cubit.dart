@@ -137,10 +137,6 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
   int countErrorUpdateComment = 0;
 
   void updateComment(int postId, int commendId, String commentUser) async {
-    print(postId.runtimeType);
-    print(commendId.runtimeType);
-    print(commentUser.runtimeType);
-
     emit(LoadingUpdateCommentNewsState());
     countErrorUpdateComment++;
     try {

@@ -8,6 +8,7 @@ import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:beinmatch/view/home/home_screen.dart';
+import 'package:beinmatch/view/home/match/match_home.dart';
 import 'package:beinmatch/view/main/Drawer.dart';
 import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit()..getNews()),
+        BlocProvider(create: (context) => AppCubit()..getNews()..getClub()..getMatch()),
         // BlocProvider(create: (context) => SingleNewsCubit()),
 
         // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
