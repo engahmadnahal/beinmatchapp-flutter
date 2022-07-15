@@ -8,6 +8,7 @@ import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/model/club/club_model.dart';
 import 'package:beinmatch/view/errors/get_data.dart';
+import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:beinmatch/view/home/news/load_data.dart';
 import 'package:beinmatch/view/home/news/news_single.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -119,34 +120,39 @@ class NewsHome extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return Container(
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    child: Image.network(
-                                      '${AppCubit.get(context).clubs[index].avater}',
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    child: Center(
-                                      child: Text(
-                                        '${AppCubit.get(context).clubs[index].name}',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
+                            return InkWell(
+                              onTap: (){
+                                Components.navigator(context: context, screen: SingleClub(AppCubit.get(context).clubs[index].id));
+                              },
+                              child: Container(
+                                height: 100,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Image.network(
+                                        '${AppCubit.get(context).clubs[index].avater}',
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      child: Center(
+                                        child: Text(
+                                          '${AppCubit.get(context).clubs[index].name}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

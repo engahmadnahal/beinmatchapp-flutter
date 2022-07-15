@@ -9,6 +9,7 @@ class ClubModel {
       });
 
   factory ClubModel.fromJson(Map<String, dynamic> json) => ClubModel(
+
       id : json['id'],
       name : json['name'],
       avater : json['avater'],

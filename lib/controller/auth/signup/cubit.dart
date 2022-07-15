@@ -19,7 +19,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   static SignUpCubit get(context) => BlocProvider.of(context);
 
-  void signUp(context, var formKey, String fname,String lname, String email, String password) async {
+  void signUp(context, var formKey, String fname,String lname, String email, String password,String osMobile) async {
     emit(SignUpLoading());
     /**
      * Validate TextFields 
@@ -43,6 +43,7 @@ class SignUpCubit extends Cubit<SignUpState> {
             'lname':lname,
             'email': email,
             'password': password,
+            'os_mobile' : osMobile
           },
         );
         /// Store Map<> For All User Data , using [Json encode]

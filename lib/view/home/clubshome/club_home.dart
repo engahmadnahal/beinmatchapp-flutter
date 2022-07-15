@@ -1,6 +1,8 @@
+import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
+import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -219,45 +221,50 @@ class ClubHome extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: dawry.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          backgroundImage: FadeInImage.assetNetwork(
-                                            placeholder: Config.placeholderImage,
-                                            image: '${AppCubit.get(context).clubs[index].avater}',
-                                          ).image,
-                                          radius: 25,
-                                        ),
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          '${AppCubit.get(context).clubs[index].name}',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                            return InkWell(
+                              onTap: (){
+                                Components.navigator(context: context, screen: SingleClub(AppCubit.get(context).clubs[index].id));
+                              },
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Color(Config.primaryColor),
+                                          CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: FadeInImage.assetNetwork(
+                                              placeholder: Config.placeholderImage,
+                                              image: '${AppCubit.get(context).clubs[index].avater}',
+                                            ).image,
+                                            radius: 25,
                                           ),
-                                        ]),
-                                  ),
-                                ],
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            '${AppCubit.get(context).clubs[index].name}',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              color: Color(Config.primaryColor),
+                                            ),
+                                          ]),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

@@ -7,6 +7,8 @@ import 'package:beinmatch/controller/home/news/single/cubit.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
+import 'package:beinmatch/view/home/clubs/single/loader.dart';
+import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:beinmatch/view/home/home_screen.dart';
 import 'package:beinmatch/view/home/match/match_home.dart';
 import 'package:beinmatch/view/main/Drawer.dart';
@@ -88,7 +90,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
             home: Directionality(
               textDirection: TextDirection.rtl,
-              child: screen
+              child: screen,
             ),
           );
 

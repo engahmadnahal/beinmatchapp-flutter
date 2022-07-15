@@ -7,12 +7,12 @@ class SingelClubModel {
   String? name;
   String? avater;
   String? country;
-  int? playing;
-  int? have_won;
-  int? draw;
-  int? game_over;
-  int? difference;
-  int? points;
+  String? playing;
+  String? have_won;
+  String? draw;
+  String? game_over;
+  String? difference;
+  String? points;
   List<SingelClubModel>? clubs;
   List<MatchModel>? matches;
   List<Post>? posts;
@@ -54,8 +54,8 @@ class SingelClubModel {
         .map((i) => MatchModel.fromJson(i))
         .toList();
     }
-    if(json['posts'] != null){
-      posts = (json['posts'] as List)
+    if(json['post'] != null){
+      posts = (json['post'] as List)
         .map((i) => Post.fromJson(i))
         .toList();
     }

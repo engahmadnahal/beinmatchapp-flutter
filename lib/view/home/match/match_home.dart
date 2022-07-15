@@ -6,6 +6,7 @@ import 'package:beinmatch/model/match/match_model.dart';
 import 'package:beinmatch/model/news/news_model.dart';
 import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:beinmatch/view/home/news/news_single.dart';
+import 'package:beinmatch/view/video_match/single_match.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -455,13 +456,18 @@ class MatchHome extends StatelessWidget {
       shrinkWrap: true,
       itemCount: matches.length,
       itemBuilder: (context, index) {
-        return Components.matchesComponent(
-          context: context,
-          logo1: matches[index].club_one!.logo,
-          logo2: matches[index].club_two!.logo,
-          name1: matches[index].club_one!.name,
-          name2: matches[index].club_two!.name,
-          statusMatch: 'مباشر',
+        return InkWell(
+          onTap: (){
+            Components.navigator(context: context, screen: SingleMatch(matches[index]));
+          },
+          child: Components.matchesComponent(
+            context: context,
+            logo1: matches[index].club_one!.logo,
+            logo2: matches[index].club_two!.logo,
+            name1: matches[index].club_one!.name,
+            name2: matches[index].club_two!.name,
+            statusMatch: 'مباشر',
+          ),
         );
       },
       separatorBuilder: (context, index) {

@@ -124,7 +124,7 @@ class Components {
   }
 
   static ScaffoldFeatureController snakBar(
-      {@required var context, String? text, Color? color}) {
+      {required var context, String? text, Color? color}) {
     SnackBar snackBar = SnackBar(
       content: Text("$text"),
       backgroundColor: color,

@@ -16,9 +16,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Home extends StatelessWidget   {
   Home({Key? key}) : super(key: key);
 
-
-
-  String? token = SheardHelper.getData('token');
   @override
   Widget build(BuildContext context) {
     // double xOff = -(MediaQuery.of(context).size.width / 3) * 2;

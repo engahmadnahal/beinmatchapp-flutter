@@ -16,7 +16,7 @@ class DrawerCustom extends StatelessWidget {
     {'title': "أخر الأخبار", 'icon': Icons.newspaper, 'screen': MainLayout()},
     {'title': "التفضيلات", 'icon': Icons.favorite_border, 'screen': FavoriteScreen()},
     // {'title': "البطولات", 'icon': Icons.sports_soccer_outlined,'screen':Home()},
-    {'title': "الفرق الرياضية", 'icon': Icons.sports_kabaddi_outlined,'screen':ClubScreen()},
+    // {'title': "الفرق الرياضية", 'icon': Icons.sports_kabaddi_outlined,'screen':ClubScreen()},
     {'title': "الاعدادات", 'icon': Icons.settings_outlined,'screen':SettingScreen()},
     {'title': "خروج", 'icon': Icons.exit_to_app,'screen':AuthLogin()},
     {'title': "فيس بوك", 'icon': Icons.facebook_outlined},

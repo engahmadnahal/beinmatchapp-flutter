@@ -13,9 +13,12 @@ class MatchModel{
   Club? club_two;
   Dawry? dawry;
   Channel? channel;
-  Comments? comments;
-  MatchModel({this.id, this.botola, this.timeStart, this.likes, this.dislikes, this.poll_to_club_one, this.poll_to_darw, this.poll_to_club_two, this.user_like_check, this.poll_user_check, this.club_one, this.club_two, this.dawry, this.channel, this.comments});
+  // Comments? comments;
+  MatchModel({this.id, this.botola, this.timeStart, this.likes, this.dislikes, this.poll_to_club_one, this.poll_to_darw, this.poll_to_club_two, this.user_like_check, this.poll_user_check, this.club_one, this.club_two, this.dawry, this.channel,
+    // this.comments
+  });
   factory MatchModel.fromJson(Map<String, dynamic> json){
+
     return MatchModel(
       id: json['id'],
       botola: json['botola'],
@@ -31,7 +34,7 @@ class MatchModel{
       club_two: Club.fromJson(json['club_two']),
       dawry: Dawry.fromJson(json['dawry']),
       channel: Channel.fromJson(json['channel']),
-      comments: Comments.fromJson(json['comments']),
+      // comments: Comments.fromJson(json['comments']),
     );
   }
 
@@ -94,16 +97,65 @@ class ChannelUrl{
      urls!.add(json['three']);
     }
 }
+// class Comments{
+//   int? count;
+//   List<Comments>? data;
+//   Comments({this.count, this.data});
+//   factory Comments.fromJson(Map<String, dynamic> json){
+//     return Comments(
+//       count: json['count'],
+//       data: List<Comments>.from(json['data'].map((x) => Comments.fromJson(x))),
+//     );
+//   }
+// }
+
 class Comments{
-  int? count;
-  List<Comments>? data;
-  Comments({this.count, this.data});
-  factory Comments.fromJson(Map<String, dynamic> json){
-    return Comments(
-      count: json['count'],
-      data: List<Comments>.from(json['data'].map((x) => Comments.fromJson(x))),
-    );
+  // int? count;
+  int? idComment;
+  String? content;
+  User? user;
+  // String? created_at;
+
+  List<Comments> data = [];
+  Comments({
+    this.idComment,
+    this.content,
+    this.user,
+    // this.created_at
+  });
+
+  Comments.fromJson(Map<String, dynamic> json) {
+    if (json['data'].isNotEmpty) {
+      json['data'].forEach((element) {
+        data.add(Comments(
+            idComment: element['id'],
+            content: element['comment'],
+            user: User.fromJson(element['user']),
+            // created_at: element['created_at']
+        ));
+      });
+    }
   }
+}
+
+class User {
+  int? id;
+  String? name;
+  String? avater;
+  // String? created_at;
+  User({
+    this.id,
+    this.name,
+    this.avater,
+    // this.created_at
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json["id"],
+    name: json["fname"] + " " + json["lname"],
+    avater: json["avater"],
+    // created_at : json["created_at"]
+  );
 }
 
 

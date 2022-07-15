@@ -52,6 +52,9 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   # Refresh Indecator Liquid animation
   liquid_pull_to_refresh: ^3.0.1
+  # Player Video
+  video_player: ^2.4.5
+  chewie: ^1.3.4
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

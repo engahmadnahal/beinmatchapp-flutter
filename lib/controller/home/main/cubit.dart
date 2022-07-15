@@ -25,7 +25,6 @@ class MainLayoutCubit extends Cubit<MainLayoutStates> {
   double zOff = 0;
 
   void openDrawer(context) {
-    print('Comming Drawer');
     emit(LoadingMainLayoutDrawerState());
     isOpenDrawer = !isOpenDrawer;
     try {

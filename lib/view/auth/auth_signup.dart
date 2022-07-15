@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/controller/auth/signup/cubit.dart';
@@ -164,7 +166,9 @@ class AuthSignUp extends StatelessWidget {
                                           fname.value.text,
                                           lname.value.text,
                                           email.value.text,
-                                          password.value.text);
+                                          password.value.text,
+                                        Platform.isAndroid ? "Android" : "IOS"
+                                      );
                                     },
                                   ),
                                 ],

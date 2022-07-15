@@ -8,6 +8,7 @@ import 'package:beinmatch/controller/home/news/stats.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/model/news/news_model.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,7 +46,7 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
 
   /*-------------------------------- {Start Rating} --------------------------------*/
 
-  /// Varible For Like and DisLike
+  /// Variable For Like and DisLike
   int? countLike = null;
   int? countDisLike = null;
   int? statusUser = null;
@@ -149,6 +150,9 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
       emit(SuccessUpdateCommentNewsState());
     } catch (e) {
       print(e.toString());
+      if(e is DioError){
+        print(e.response!.data);
+      }
       if (countErrorUpdateComment < 3) {
         updateComment(postId, commendId, commentUser);
       } else {
@@ -188,6 +192,8 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
     }
   }
 
+/*-------------------------------- {Start Get Comment Post} --------------------------------*/
+
   int countErrorGetComment = 0;
 
   Future<void> getAllComment(int postId) async {
@@ -212,6 +218,8 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
       } catch (e) {}
     }
   }
+
+/*-------------------------------- {Start Delete Comment Post} --------------------------------*/
 
   int countErrorDeleteComment = 0;
 
@@ -241,4 +249,5 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
       }
     }
   }
+
 }
