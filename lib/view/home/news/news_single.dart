@@ -31,7 +31,7 @@ class NewsSingle extends StatelessWidget {
     return BlocProvider(
       create: (context) => SingleNewsCubit()
         ..getStatusLikeUser(post!.isLikes)
-        ..getRecommendedPost()..getAllComment(post!.id!),
+        ..getRecommendedPost()..getAllComment(post!.id!)..sendView(post!.id!),
       child: BlocConsumer<SingleNewsCubit, SingleNewsState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -126,308 +126,307 @@ class NewsSingle extends StatelessWidget {
                     },
                     body: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
-                      child: Padding(
+                      child: Container(
                         padding: EdgeInsets.all(10),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(7),
-                                child: Text(
-                                  '${post!.title}',
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(Config.primaryColor),
-                                  ),
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(7),
+                              child: Text(
+                                '${post!.title}',
+                                maxLines: 2,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(Config.primaryColor),
                                 ),
                               ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '${post!.created_at}',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                          ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${post!.created_at}',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
                                         ),
-                                        SizedBox(
-                                          width: 5,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        '${post!.dawry!.name}',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
                                         ),
-                                        Text(
-                                          '${post!.dawry!.name}',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            // LikeButton(
-                                            //   isLiked: false,
-                                            //   likeCount: post!.likes,
-                                            //   padding:
-                                            //       EdgeInsets.only(left: 10, right: 10),
-                                            //   likeBuilder: (bool isLiked) {
-                                            //     return IconButton(
-                                            //       onPressed: () {
-                                            //         MainLayoutCubit.get(context)
-                                            //             .sendLike(post!.id, true);
-                                            //       },
-                                            //       icon: Icon(Icons.thumb_up,
-                                            //           color:
-                                            //               Color(Config.unActiveColor),
-                                            //           size: 30),
-                                            //     );
-                                            //   },
-                                            //   countBuilder: (count, cond, text) {
-                                            //     return Text(
-                                            //       '${count}',
-                                            //       style: TextStyle(
-                                            //           fontSize: 15,
-                                            //           fontWeight: FontWeight.bold,
-                                            //           color:
-                                            //               Color(Config.primaryColor)),
-                                            //     );
-                                            //   },
-                                            // ),
-                                            IconButton(
-                                              onPressed: () {
-                                                SingleNewsCubit.get(context)
-                                                    .sendLike(post!.id, 1);
-                                              },
-                                              icon: Icon(
-                                                Icons.thumb_up,
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          // LikeButton(
+                                          //   isLiked: false,
+                                          //   likeCount: post!.likes,
+                                          //   padding:
+                                          //       EdgeInsets.only(left: 10, right: 10),
+                                          //   likeBuilder: (bool isLiked) {
+                                          //     return IconButton(
+                                          //       onPressed: () {
+                                          //         MainLayoutCubit.get(context)
+                                          //             .sendLike(post!.id, true);
+                                          //       },
+                                          //       icon: Icon(Icons.thumb_up,
+                                          //           color:
+                                          //               Color(Config.unActiveColor),
+                                          //           size: 30),
+                                          //     );
+                                          //   },
+                                          //   countBuilder: (count, cond, text) {
+                                          //     return Text(
+                                          //       '${count}',
+                                          //       style: TextStyle(
+                                          //           fontSize: 15,
+                                          //           fontWeight: FontWeight.bold,
+                                          //           color:
+                                          //               Color(Config.primaryColor)),
+                                          //     );
+                                          //   },
+                                          // ),
+                                          IconButton(
+                                            onPressed: () {
+                                              SingleNewsCubit.get(context)
+                                                  .sendLike(post!.id, 1);
+                                            },
+                                            icon: Icon(
+                                              Icons.thumb_up,
+                                              color: SingleNewsCubit.get(
+                                                          context)
+                                                      .isActive('like') ??
+                                                  SingleNewsCubit.get(context)
+                                                      .colorBtn,
+                                              size: 30,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          /**
+                                           *
+                                           * Stop Counter Like And DisLike
+                                           * Run This When Sum User Useing App 2k
+                                           */
+                                          // Text(
+                                          //   '${MainLayoutCubit.get(context).countLike ?? post!.likes}',
+                                          //   style: TextStyle(
+                                          //       fontSize: 15,
+                                          //       fontWeight: FontWeight.bold,
+                                          //       color: Color(Config.primaryColor)),
+                                          // ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          // LikeButton(
+                                          //   isLiked: false,
+                                          //   likeCount: post!.likes,
+                                          //   padding: EdgeInsets.only(left: 10,right: 10),
+                                          //   likeBuilder: (bool isLiked) {
+                                          //     return IconButton(
+                                          //       onPressed: () {
+                                          //         MainLayoutCubit.get(context)
+                                          //             .sendLike(post!.id, false);
+                                          //       },
+                                          //       icon: Icon(Icons.thumb_down,
+                                          //           color:
+                                          //               Color(Config.unActiveColor),
+                                          //           size: 30),
+                                          //     );
+                                          //   },
+                                          //   countBuilder: (count, cond, text) {
+                                          //     return Text(
+                                          //       '${count}',
+                                          //       style: TextStyle(
+                                          //           fontSize: 15,
+                                          //           fontWeight: FontWeight.bold,
+                                          //           color:
+                                          //               Color(Config.primaryColor)),
+                                          //     );
+                                          //   },
+                                          // ),
+                                          IconButton(
+                                            onPressed: () {
+                                              SingleNewsCubit.get(context)
+                                                  .sendLike(post!.id, 0);
+                                            },
+                                            icon: Icon(Icons.thumb_down,
                                                 color: SingleNewsCubit.get(
                                                             context)
-                                                        .isActive('like') ??
-                                                    SingleNewsCubit.get(context)
+                                                        .isActive(
+                                                            'dislike') ??
+                                                    SingleNewsCubit.get(
+                                                            context)
                                                         .colorBtn,
-                                                size: 30,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 3,
-                                            ),
-                                            /**
-                                             *
-                                             * Stop Counter Like And DisLike
-                                             * Run This When Sum User Useing App 2k
-                                             */
-                                            // Text(
-                                            //   '${MainLayoutCubit.get(context).countLike ?? post!.likes}',
-                                            //   style: TextStyle(
-                                            //       fontSize: 15,
-                                            //       fontWeight: FontWeight.bold,
-                                            //       color: Color(Config.primaryColor)),
-                                            // ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            // LikeButton(
-                                            //   isLiked: false,
-                                            //   likeCount: post!.likes,
-                                            //   padding: EdgeInsets.only(left: 10,right: 10),
-                                            //   likeBuilder: (bool isLiked) {
-                                            //     return IconButton(
-                                            //       onPressed: () {
-                                            //         MainLayoutCubit.get(context)
-                                            //             .sendLike(post!.id, false);
-                                            //       },
-                                            //       icon: Icon(Icons.thumb_down,
-                                            //           color:
-                                            //               Color(Config.unActiveColor),
-                                            //           size: 30),
-                                            //     );
-                                            //   },
-                                            //   countBuilder: (count, cond, text) {
-                                            //     return Text(
-                                            //       '${count}',
-                                            //       style: TextStyle(
-                                            //           fontSize: 15,
-                                            //           fontWeight: FontWeight.bold,
-                                            //           color:
-                                            //               Color(Config.primaryColor)),
-                                            //     );
-                                            //   },
-                                            // ),
-                                            IconButton(
-                                              onPressed: () {
-                                                SingleNewsCubit.get(context)
-                                                    .sendLike(post!.id, 0);
-                                              },
-                                              icon: Icon(Icons.thumb_down,
-                                                  color: SingleNewsCubit.get(
-                                                              context)
-                                                          .isActive(
-                                                              'dislike') ??
-                                                      SingleNewsCubit.get(
-                                                              context)
-                                                          .colorBtn,
-                                                  size: 30),
-                                            ),
-                                            SizedBox(
-                                              width: 3,
-                                            ),
-                                            /**
-                                             *
-                                             * Stop Counter Like And DisLike
-                                             * Run This When Sum User Useing App 2k
-                                             */
-                                            // Text(
-                                            //   '${MainLayoutCubit.get(context).countDisLike ?? post!.dislikes}',
-                                            //   style: TextStyle(
-                                            //       fontSize: 15,
-                                            //       fontWeight: FontWeight.bold,
-                                            //       color: Color(Config.primaryColor)),
-                                            // ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                width: double.infinity,
-                                child: Text("${post!.body}",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.black)),
-                              ),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Container(
-                                child: Text(
-                                  'مقترحة لك',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(Config.primaryColor),
+                                                size: 30),
+                                          ),
+                                          SizedBox(
+                                            width: 3,
+                                          ),
+                                          /**
+                                           *
+                                           * Stop Counter Like And DisLike
+                                           * Run This When Sum User Useing App 2k
+                                           */
+                                          // Text(
+                                          //   '${MainLayoutCubit.get(context).countDisLike ?? post!.dislikes}',
+                                          //   style: TextStyle(
+                                          //       fontSize: 15,
+                                          //       fontWeight: FontWeight.bold,
+                                          //       color: Color(Config.primaryColor)),
+                                          // ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              child: Text("${post!.body}",
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black)),
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Container(
+                              child: Text(
+                                'مقترحة لك',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(Config.primaryColor),
+                                ),
                               ),
-                              ListView.separated(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: SingleNewsCubit.get(context)
-                                    .getRecomPost
-                                    .length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Components.navigator(
-                                        context: context,
-                                        screen: NewsSingle(post: SingleNewsCubit.get(context)
-                                            .getRecomPost[index],),
-                                      );
-                                    },
-                                    child: Components.post(
-                                        context: context,
-                                        image:
-                                            '${SingleNewsCubit.get(context).getRecomPost[index].thumnail}',
-                                        title:
-                                            '${SingleNewsCubit.get(context).getRecomPost[index].title}',
-                                        created_at:
-                                            '${SingleNewsCubit.get(context).getRecomPost[index].created_at}',
-                                        tags:
-                                            '${SingleNewsCubit.get(context).getRecomPost[index].dawry!.name}'),
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return SizedBox(
-                                    height: 15,
-                                  );
-                                },
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Stack(
-                                alignment: AlignmentDirectional.centerEnd,
-                                children: [
-                                  Form(
-                                    key: formKey,
-                                    child: TextFormField(
-                                      controller: comment,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return "الرجاء إدخال التعليق";
-                                        }
-                                      },
-                                      style: TextStyle(fontSize: 15),
-                                      decoration: InputDecoration(
-                                        fillColor: Colors.grey[300],
-                                        filled: true,
-                                        labelText: 'اكتب تعليقاً',
-                                        labelStyle: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[600],
-                                        ),
-                                        // border: OutlineInputBorder(
-                                        //   borderRadius: BorderRadius.circular(10),
-                                        //   borderSide: BorderSide(
-                                        //     width: 0,
-                                        //   ),
-
-                                        // ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  IconButton(
-                                    splashRadius: 1,
-                                    onPressed: () {
-                                      print("Hello Comments");
-                                      if (formKey.currentState!.validate()) {
-                                        formKey.currentState!.save();
-                                        SingleNewsCubit.get(context).sendComment(post!.id!,comment.value.text);
+                            ),
+                            ListView.separated(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: SingleNewsCubit.get(context)
+                                  .getRecomPost
+                                  .length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Components.navigator(
+                                      context: context,
+                                      screen: NewsSingle(post: SingleNewsCubit.get(context)
+                                          .getRecomPost[index],),
+                                    );
+                                  },
+                                  child: Components.post(
+                                      context: context,
+                                      image:
+                                          '${SingleNewsCubit.get(context).getRecomPost[index].thumnail}',
+                                      title:
+                                          '${SingleNewsCubit.get(context).getRecomPost[index].title}',
+                                      created_at:
+                                          '${SingleNewsCubit.get(context).getRecomPost[index].created_at}',
+                                      tags:
+                                          '${SingleNewsCubit.get(context).getRecomPost[index].dawry!.name}'),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return SizedBox(
+                                  height: 15,
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Stack(
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: [
+                                Form(
+                                  key: formKey,
+                                  child: TextFormField(
+                                    controller: comment,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "الرجاء إدخال التعليق";
                                       }
                                     },
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: Color(Config.primaryColor),
-                                      size: 30,
+                                    style: TextStyle(fontSize: 15),
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.grey[300],
+                                      filled: true,
+                                      labelText: 'اكتب تعليقاً',
+                                      labelStyle: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[600],
+                                      ),
+                                      // border: OutlineInputBorder(
+                                      //   borderRadius: BorderRadius.circular(10),
+                                      //   borderSide: BorderSide(
+                                      //     width: 0,
+                                      //   ),
+
+                                      // ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              if(SingleNewsCubit.get(context).commentPost != null)
-                                commentList(SingleNewsCubit.get(context).commentPost!,state),
-                              SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                IconButton(
+                                  splashRadius: 1,
+                                  onPressed: () {
+                                    print("Hello Comments");
+                                    if (formKey.currentState!.validate()) {
+                                      formKey.currentState!.save();
+                                      SingleNewsCubit.get(context).sendComment(post!.id!,comment.value.text);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.send,
+                                    color: Color(Config.primaryColor),
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            if(SingleNewsCubit.get(context).commentPost != null)
+                              commentList(SingleNewsCubit.get(context).commentPost!,state),
+                            SizedBox(
+                              height: 30,
+                            ),
+                          ],
                         ),
                       ),
                     ),

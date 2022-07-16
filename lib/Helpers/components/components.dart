@@ -17,14 +17,14 @@ class Components {
           onPressed: () {
             navigator(context: context, screen: Search());
           },
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           color: color ??= Color(Config.primaryColor),
         ),
         IconButton(
           onPressed: () {
             navigator(context: context, screen: BoxMsg());
           },
-          icon: Icon(Icons.notification_add_outlined),
+          icon: const Icon(Icons.notification_add_outlined),
           color: color ??= Color(Config.primaryColor),
         ),
         IconButton(
@@ -74,7 +74,7 @@ class Components {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 20,
         ),
         Expanded(
@@ -84,31 +84,31 @@ class Components {
             children: [
               Text(
                 '$title',
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 15,
                     overflow: TextOverflow.ellipsis),
                 maxLines: 2,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 children: [
                   Text(
                     '$created_at',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         overflow: TextOverflow.ellipsis),
                     maxLines: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
                     '$tags',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         overflow: TextOverflow.ellipsis),
@@ -158,7 +158,7 @@ class Components {
         maximumSize: MaterialStateProperty.all(
           Size(w, h),
         ),
-        padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 10,
         )),
@@ -174,7 +174,7 @@ class Components {
       ),
       child: Text(
         "$text",
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
@@ -193,7 +193,7 @@ class Components {
         fit: BoxFit.cover,
         placeholder: AssetImage(Config.placeholderImage),
         image: NetworkImage(
-          '${url}',
+          url!,
         ),
       );
     } catch (error) {
@@ -217,7 +217,7 @@ class Components {
       required statusMatch}) {
     return Container(
       width: MediaQuery.of(context).size.width - 20,
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           border: Border.all(
             color: Colors.black26,
@@ -239,9 +239,9 @@ class Components {
                     placeholder: Config.placeholderImage,
                     image: logo1,
                   ).image,
-                  radius: 30,
+                  radius: 25,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
@@ -257,12 +257,12 @@ class Components {
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               color: Color(Config.primaryColor),
               child: Center(
                 child: Text(
                   statusMatch,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -280,11 +280,11 @@ class Components {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 CircleAvatar(
-                  radius: 30,
+                  radius: 25,
                   backgroundColor: Colors.white,
                   backgroundImage: FadeInImage.assetNetwork(
                     width: 30,
@@ -316,7 +316,7 @@ class Components {
   }) {
     return Container(
       color: color,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         children: [
           Expanded(
@@ -351,7 +351,7 @@ class Components {
                     ),
                   ),
                 ),
-                SizedBox(width: 5,),
+                const SizedBox(width: 5,),
                 Expanded(
                   flex: 2,
                   child: Container(

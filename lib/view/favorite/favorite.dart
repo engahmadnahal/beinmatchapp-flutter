@@ -86,6 +86,7 @@ class FavoriteScreen extends StatelessWidget {
                   ),
                   body: Container(
                     color: Colors.white,
+                    height: MediaQuery.of(context).size.height,
                     child: LiquidPullToRefresh(
                       color: Color(Config.primaryColor),
                       springAnimationDurationInMilliseconds: 500,
@@ -117,74 +118,83 @@ class FavoriteScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 30,
                                 ),
-                                ListView.separated(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: FavoriteCubit.get(context).clubs.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onTap: (){
-                                          Components.navigator(context: context,
-                                              screen: SingleClub(FavoriteCubit.get(context).clubs[index].id));
-                                        },
-                                        child: Container(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
+                                Builder(
+                                  builder: (context){
+                                    if(state is SuccessClubFavoriteState || FavoriteCubit.get(context).clubs.length > 0){
+                                      return ListView.separated(
+                                          physics: NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: FavoriteCubit.get(context).clubs.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              onTap: (){
+                                                Components.navigator(context: context,
+                                                    screen: SingleClub(FavoriteCubit.get(context).clubs[index].id));
+                                              },
+                                              child: Container(
                                                 child: Row(
                                                   children: [
-                                                    CircleAvatar(
-                                                      backgroundColor: Colors.white,
-                                                      backgroundImage:
-                                                      FadeInImage.assetNetwork(
-                                                        placeholder: Config.placeholderImage,
-                                                        image: "${FavoriteCubit.get(context).clubs[index].avater}",
-                                                      ).image,
-                                                      radius: 25,
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            backgroundColor: Colors.white,
+                                                            backgroundImage:
+                                                            FadeInImage.assetNetwork(
+                                                              placeholder: Config.placeholderImage,
+                                                              image: "${FavoriteCubit.get(context).clubs[index].avater}",
+                                                            ).image,
+                                                            radius: 25,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 15,
+                                                          ),
+                                                          Text(
+                                                            "${FavoriteCubit.get(context).clubs[index].name}",
+                                                            style: TextStyle(
+                                                                color: Colors.black,
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 16),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    SizedBox(
-                                                      width: 15,
-                                                    ),
-                                                    Text(
-                                                      "${FavoriteCubit.get(context).clubs[index].name}",
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight.bold,
-                                                          fontSize: 16),
+                                                    Expanded(
+                                                      child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed: () {
+                                                                FavoriteCubit.get(context).sendFavorite(context, FavoriteCubit.get(context).clubs[index].id!);
+                                                              },
+                                                              icon: Icon(
+                                                                Icons.favorite_sharp,
+                                                                color: Color(Config.primaryColor),
+                                                              ),
+                                                            ),
+                                                            Icon(
+                                                              Icons.arrow_forward_ios,
+                                                              color: Color(Config.primaryColor),
+                                                            ),
+                                                          ]),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              Expanded(
-                                                child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          FavoriteCubit.get(context).sendFavorite(context, FavoriteCubit.get(context).clubs[index].id!);
-                                                        },
-                                                        icon: Icon(
-                                                          Icons.favorite_sharp,
-                                                          color: Color(Config.primaryColor),
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        Icons.arrow_forward_ios,
-                                                        color: Color(Config.primaryColor),
-                                                      ),
-                                                    ]),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        height: 20,
-                                      );
-                                    }),
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return SizedBox(
+                                              height: 20,
+                                            );
+                                          });
+                                    }else {
+                                      return Center(child: CircularProgressIndicator(color: Color(Config.primaryColor),),);
+                                    }
+
+                                  },
+                                ),
                                 SizedBox(
                                   height: 30,
                                 ),

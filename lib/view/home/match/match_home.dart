@@ -466,7 +466,7 @@ class MatchHome extends StatelessWidget {
             logo2: matches[index].club_two!.logo,
             name1: matches[index].club_one!.name,
             name2: matches[index].club_two!.name,
-            statusMatch: 'مباشر',
+            statusMatch: matches[index].timeStart!.substring(11,16),
           ),
         );
       },

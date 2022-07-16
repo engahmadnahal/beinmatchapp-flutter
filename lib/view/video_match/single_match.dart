@@ -6,32 +6,33 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SingleMatch extends StatelessWidget {
   MatchModel match;
-   SingleMatch(this.match ,{Key? key}) : super(key: key);
+
+  SingleMatch(this.match, {Key? key}) : super(key: key);
 
   var scafullKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
+  TextEditingController comment = TextEditingController();
+  ScrollController commentListControaller = ScrollController();
+
+
   @override
   Widget build(BuildContext context) {
-    // match.channel!.channel_url!.urls;
-    print("*************************** Urls ******************");
-    print(match.channel!.channel_url!.urls![0]);
-    print("*************************** Urls ******************");
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.dark,
     ));
     return BlocProvider(
-
       create: (context) => VideoCubit()
-        ..getAllComment(match.id!)
-        ..getStatusLikeUser(match.user_like_check!)
-        ..getVideo('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'),
-      child: BlocConsumer<VideoCubit,VideoState>(
-        listener: (context,state){},
-        builder: (context,state){
+        ..startApp(match),
+      child: BlocConsumer<VideoCubit, VideoState>(
+        listener: (context, state) {},
+        builder: (context, state) {
           return Scaffold(
             key: scafullKey,
             appBar: AppBar(
@@ -39,7 +40,7 @@ class SingleMatch extends StatelessWidget {
               backgroundColor: Colors.white,
               leading: IconButton(
                 onPressed: () {
-                  print("Arrow Play Video");
+                  Navigator.of(context).pop();
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
@@ -51,7 +52,9 @@ class SingleMatch extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     print("Seting Play Video");
-                    scafullKey.currentState!.showBottomSheet((context) => customButtomSheet(context));
+                    scafullKey.currentState!.showBottomSheet((context) =>
+                        settingVideoButtomSheet(
+                            context, match.channel!.channel_url!.urls!));
                   },
                   icon: Icon(
                     Icons.settings,
@@ -63,15 +66,17 @@ class SingleMatch extends StatelessWidget {
             ),
             body: SafeArea(
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Container(
+                  color: Colors.white,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
                       Stack(
                         children: [
-                          Builder(builder: (context){
-                            if(VideoCubit.get(context).isReady){
+                          Builder(builder: (context) {
+                            if (VideoCubit.get(context).isReady) {
                               return Container(
                                 color: Colors.black,
                                 width: MediaQuery.of(context).size.width,
@@ -84,7 +89,9 @@ class SingleMatch extends StatelessWidget {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height / 3,
                               child: Center(
-                                child: Text("Video"),
+                                child: CircularProgressIndicator(
+                                  color: Color(Config.primaryColor),
+                                ),
                               ),
                             );
                           }),
@@ -130,170 +137,194 @@ class SingleMatch extends StatelessWidget {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width - 50,
-                        height: MediaQuery.of(context).size.height / 10,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.grey[300],
-                                backgroundImage: NetworkImage('https://www.yalla-shoot.com/images/upload/images/1376918123.png'),
-                              ),
+                            Expanded(child:
+                                Container(
+                                  width: 65,
+                                  height: 65,
+                                  child: Image(
+                                    image:
+                                    NetworkImage('${match.club_one!.logo}'),
+                                  ),
+                                )
                             ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: CircleAvatar(
+                            //     radius: 44,
+                            //     backgroundColor: Colors.grey[300],
+                            //     backgroundImage: Image(
+                            //       image:
+                            //           NetworkImage('${match.club_one!.logo}'),
+                            //       width: 15,
+                            //       height: 15,
+                            //     ).image,
+                            //   ),
+                            // ),
                             Expanded(
                               flex: 3,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 20),
-                                padding: EdgeInsets.all(4),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                    Color(Config.primaryColor),
-                                                    borderRadius:
-                                                    BorderRadius.circular(25),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      right: 20,
-                                                      top: 6,
-                                                      bottom: 6,
-                                                      left: 20),
-                                                  child: Text(
-                                                    "فوز",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "30%",
-                                                  style: TextStyle(
-                                                      color:
-                                                      Color(Config.primaryColor)),
-                                                ),
-                                              ],
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap : (){
+                                              VideoCubit.get(context).sendPoll(match.id!, one: true, draw: false, two: false);
+                                            },
+                                          child: Container(
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                              color: VideoCubit.get(context).colorPoll('one'),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      25),
+                                            ),
+                                            padding: const EdgeInsets.only(
+                                                right: 20,
+                                                top: 6,
+                                                bottom: 6,
+                                                left: 20),
+                                            margin: const EdgeInsets.only(bottom: 5),
+                                            child: Text(
+                                              "فوز",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: VideoCubit.get(context).colorTextPoll('one'),
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.bold),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                    Color(Config.unActiveColor),
-                                                    borderRadius:
-                                                    BorderRadius.circular(25),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      right: 15,
-                                                      top: 6,
-                                                      bottom: 6,
-                                                      left: 15),
-                                                  child: Text(
-                                                    "تعادل",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: Color(
-                                                            Config.primaryColor),
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "40%",
-                                                  style: TextStyle(
-                                                      color: Colors.green[500]),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                    Color(Config.unActiveColor),
-                                                    borderRadius:
-                                                    BorderRadius.circular(25),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      right: 20,
-                                                      top: 6,
-                                                      bottom: 6,
-                                                      left: 20),
-                                                  child: Text(
-                                                    textAlign: TextAlign.center,
-                                                    "فوز",
-                                                    style: TextStyle(
-                                                        color: Color(
-                                                            Config.primaryColor),
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "30%",
-                                                  style: TextStyle(
-                                                      color: Color(
-                                                          Config.secondaryColor)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                        Text(
+                                          "${VideoCubit.get(context).numPollOnePersant}%",
+                                          style: TextStyle(
+                                              color: Color(
+                                                  Config.primaryColor)),
+                                        ),
+                                      ],
                                     ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap : (){
+                                            VideoCubit.get(context).sendPoll(match.id!, one: false, draw: true, two: false);
+                                          },
+                                          child: Container(
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                              color: VideoCubit.get(context).colorPoll('draw'),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      25),
+                                            ),
+                                            padding: EdgeInsets.only(
+                                                right: 15,
+                                                top: 6,
+                                                bottom: 6,
+                                                left: 15),
+                                            margin: const EdgeInsets.only(bottom: 5),
+                                            child: Text(
+                                              "ت",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: VideoCubit.get(context).colorTextPoll('draw'),
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
 
+                                        Text(
+                                          "${VideoCubit.get(context).numPollDrawPersant}%",
+                                          style: TextStyle(
+                                              color: Colors.green[500]),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
 
-                                  ],
-                                ),
+                                      children:  [
+                                        InkWell(
+                                          onTap : (){
+                                            VideoCubit.get(context).sendPoll(match.id!, one: false, draw: false, two: true);
+                                          },
+                                          child: Container(
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                              color: VideoCubit.get(context).colorPoll('two'),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      25),
+                                            ),
+                                            padding: EdgeInsets.only(
+                                                right: 20,
+                                                top: 6,
+                                                bottom: 6,
+                                                left: 20),
+                                            margin: const EdgeInsets.only(bottom: 5),
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              "فوز",
+                                              style: TextStyle(
+                                                  color: VideoCubit.get(context).colorTextPoll('two'),
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${VideoCubit.get(context).numPollTwoPersant}%",
+                                          style: TextStyle(
+                                              color: Color(Config
+                                                  .secondaryColor)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.grey[300],
-                                backgroundImage: NetworkImage('https://www.yalla-shoot.com/images/upload/images/98760.png'),
+                            Expanded(child:
+                            Container(
+                              width: 65,
+                              height: 65,
+                              child: Image(
+                                image:
+                                NetworkImage('${match.club_two!.logo}'),
                               ),
+                            )
                             ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: CircleAvatar(
+                            //     radius: 44,
+                            //     backgroundColor: Colors.grey[300],
+                            //     backgroundImage: Image(
+                            //       image:
+                            //           NetworkImage('${match.club_two!.logo}'),
+                            //       width: 15,
+                            //       height: 15,
+                            //     ).image,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       Container(
                         height: 1,
@@ -301,92 +332,102 @@ class SingleMatch extends StatelessWidget {
                         color: Colors.grey[400],
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("التعليقات",style: TextStyle(
-                                color: Color(Config.primaryColor),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17
-                            ),),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    VideoCubit.get(context)
-                                        .sendLike(match.id, 1);
-                                  },
-                                  icon: Icon(
-                                    Icons.thumb_up,
-                                    color: VideoCubit.get(
-                                        context)
-                                        .isActive('like') ??
-                                        VideoCubit.get(context)
-                                            .colorBtn,
-                                    size: 30,
+                      Expanded(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "التعليقات",
+                                style: TextStyle(
+                                    color: Color(Config.primaryColor),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      VideoCubit.get(context)
+                                          .sendLike(match.id, 1);
+                                    },
+                                    icon: Icon(
+                                      Icons.thumb_up,
+                                      color: VideoCubit.get(context)
+                                              .isActive('like') ??
+                                          VideoCubit.get(context).colorBtn,
+                                      size: 30,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    VideoCubit.get(context)
-                                        .sendLike(match.id, 0);
-                                  },
-                                  icon: Icon(
-                                    Icons.thumb_down,
-                                    color: VideoCubit.get(
-                                        context)
-                                        .isActive(
-                                        'dislike') ??
-                                        VideoCubit.get(
-                                            context)
-                                            .colorBtn,
-                                    size: 30,
+                                  SizedBox(
+                                    width: 3,
                                   ),
-                                ),
+                                  IconButton(
+                                    onPressed: () {
+                                      VideoCubit.get(context)
+                                          .sendLike(match.id, 0);
+                                    },
+                                    icon: Icon(
+                                      Icons.thumb_down,
+                                      color: VideoCubit.get(context)
+                                              .isActive('dislike') ??
+                                          VideoCubit.get(context).colorBtn,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: commentList(
+                              VideoCubit.get(context).commentMatch,
+                              VideoCubit()),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Form(
+                          key: formKey,
+                          child: TextFormField(
+                            controller: comment,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'الرجاء كتابة تعليق !';
+                              }
+                            },
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      formKey.currentState!.save();
+                                      VideoCubit.get(context).sendComment(
+                                          match.id!, comment.value.text);
+                                      comment.text = "";
 
-                              ],
+                                    }
+                                  },
+                                  icon: Icon(Icons.send_outlined,
+                                      color: Color(Config.primaryColor))),
+                              hintText: 'علق الأن',
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: 20,
-                      ),
-
-                      Container(
-                        child: Expanded(
-                          flex: 2,
-                          child: Container (
-                            width: MediaQuery.of(context).size.width - 50,
-                            child: commentList(VideoCubit.get(context).commentMatch!,VideoCubit()),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Expanded(
-                          flex : 1,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Form(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton( onPressed: (){
-                                    print("Send");
-                                  },icon: Icon(Icons.send_outlined,color: Color(Config.primaryColor))),
-                                  hintText: 'علق الأن',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -399,38 +440,172 @@ class SingleMatch extends StatelessWidget {
     );
   }
 
-  Widget customButtomSheet(context){
+  Widget settingVideoButtomSheet(context, List<String> channelList) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2,
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.2),
+              offset: Offset(0, 0.4),
+              blurRadius: 25,
+              spreadRadius: 25,
+            )
+          ],
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+      height: MediaQuery.of(context).size.height / 3 + 80,
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Text("Seting"),
-          RaisedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("Close"),
-          ),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(25)),
+                width: MediaQuery.of(context).size.width / 9,
+                height: 5,
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "الإعدادات",
+                    style: TextStyle(
+                        color: Color(Config.secondaryColor),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      VideoCubit.get(context).startApp(match);
+                    },
+                    icon: Icon(
+                      Icons.refresh_outlined,
+                      color: Color(Config.primaryColor),
+                    ))
+              ],
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            InkWell(
+              onTap: () {
+                VideoCubit.get(context).changVideo(channelList[0]);
+                scafullKey.currentState!.showBottomSheet((context) => Container(height: 0,width: 0,));
+              },
+              child: Text(
+                "الفيديو الأول",
+                style: TextStyle(
+                    color: VideoCubit.get(context).selectUrl == channelList[0]
+                        ? Color(Config.secondaryColor)
+                        : Color(Config.primaryColor),
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            InkWell(
+              onTap: () {
+                VideoCubit.get(context).changVideo(channelList[1]);
+                scafullKey.currentState!.showBottomSheet((context) => Container(height: 0,width: 0,));
+              },
+              child: Text(
+                "الفيديو الثاني",
+                style: TextStyle(
+                    color: VideoCubit.get(context).selectUrl == channelList[1]
+                        ? Color(Config.secondaryColor)
+                        : Color(Config.primaryColor),
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            InkWell(
+              onTap: () {
+                VideoCubit.get(context).changVideo(channelList[2]);
+                scafullKey.currentState!.showBottomSheet((context) => Container(height: 0,width: 0,));
+              },
+              child: Text(
+                "الفيديو الثالث",
+                style: TextStyle(
+                    color: VideoCubit.get(context).selectUrl == channelList[2]
+                        ? Color(Config.secondaryColor)
+                        : Color(Config.primaryColor),
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            Link(
+              uri: Uri.parse(Config.website_url),
+              target: LinkTarget.blank,
+              builder: (context, followLink) => InkWell(
+                onTap: followLink,
+                child: Text(
+                  ".. مشاهدة على الموقع ..",
+                  style: TextStyle(
+                      color: Color(Config.primaryColor),
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget commentList(Comments coment,VideoCubit state){
-
-    if(
-    state is LoadingSendCommentMatchState ||
+  Widget commentList(Comments? comment, VideoCubit state) {
+    if (state is LoadingSendCommentMatchState ||
         state is LoadingUpdateCommentMatchState ||
         state is LoadingGetCommentMatchState ||
-        state is LoadingDeleteCommentMatchState
-    ){
-      return Center(child: CircularProgressIndicator(color: Color(Config.primaryColor),),);
+        state is LoadingDeleteCommentMatchState) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Color(Config.primaryColor),
+        ),
+      );
+    }
+
+    /// this if cond , solution error null checker in listView
+    if (comment == null || comment.data.length == 0) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: Center(
+            child: Text(
+          'لايوجد اي تعليقات',
+          style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Color(Config.primaryColor)),
+        )),
+      );
     }
     return ListView.separated(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
-      itemCount: coment.data.length,
+      controller: commentListControaller,
+      // reverse: true,
+      itemCount: comment.data.length,
       itemBuilder: (context, index) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -439,30 +614,27 @@ class SingleMatch extends StatelessWidget {
               backgroundColor: Colors.grey,
               radius: 30,
               child: FadeInImage(
-                image: NetworkImage(
-                    coment.data[index].user!.avater ?? 'http://app.ahmadnahal.com/assets/img/upload/media/login.png'),
+                image: NetworkImage(comment.data[index].user!.avater ??
+                    'http://app.ahmadnahal.com/assets/img/upload/media/login.png'),
                 fit: BoxFit.cover,
-                placeholder: AssetImage(
-                    'assets/imgs/default_avater.png'),
+                placeholder: const AssetImage('assets/imgs/default_avater.png'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 15,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "${coment.data[index].user!.name}",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
+                      "${comment.data[index].user!.name}",
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     // Text(
@@ -473,24 +645,21 @@ class SingleMatch extends StatelessWidget {
                     // ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
-                    '${coment.data[index].content}',
-                    style: TextStyle(
-                        fontSize: 15, color: Colors.black)),
+                Text('${comment.data[index].content}',
+                    style: const TextStyle(fontSize: 15, color: Colors.black)),
               ],
             ),
           ],
         );
       },
       separatorBuilder: (context, index) {
-        return SizedBox(
+        return const SizedBox(
           height: 10,
         );
       },
     );
   }
 }
-

@@ -41,3 +41,7 @@ class ErrorGetCommentNewsState extends SingleNewsState {}
 class LoadingDeleteCommentNewsState extends SingleNewsState {}
 class SuccessDeleteCommentNewsState extends SingleNewsState {}
 class ErrorDeleteCommentNewsState extends SingleNewsState {}
+/// Send For View For View
+class LoadingSendViewNewsState extends SingleNewsState {}
+class SuccessSendViewNewsState extends SingleNewsState {}
+class ErrorSendViewNewsState extends SingleNewsState {}

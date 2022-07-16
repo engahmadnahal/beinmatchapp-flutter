@@ -77,7 +77,7 @@ class AppCubit extends Cubit<AppState>{
       if (counterErrorGetNews < 3) {
         getNews();
       } else {
-        bool isSendLogger = await LoggerHelper.saveLog(e.toString() + " - [Class - main/cubit] - [Method - getNews]");
+        await LoggerHelper.saveLog(e.toString() + " - [Class - main/cubit] - [Method - getNews]");
         try{emit(ErrorNewsState());}catch(e){}
       }
     }

@@ -33,7 +33,7 @@ class LoginCubit extends Cubit<LoginState> {
         /**
          * Send Data For Api And Check If The User Exist
          */
-        var response = await DioHelper.postData(
+        var response = await DioHelper.postDataWithOutToken(
           url: 'user/login',
           data: {
             'email': email,
@@ -63,7 +63,7 @@ class LoginCubit extends Cubit<LoginState> {
            * Send For Error Message To Api Log System
            */
           try {
-            DioHelper.postData(url: 'log', data: {'body': e});
+            // DioHelper.postData(url: 'log', data: {'body': e});
           } catch (er) {}
         }
       }

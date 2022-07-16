@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/LoggerHelper.dart';
 import 'package:beinmatch/Helpers/components/components.dart';
@@ -250,4 +252,30 @@ class SingleNewsCubit extends Cubit<SingleNewsState> {
     }
   }
 
+/*-------------------------------- {Start Send View Post} --------------------------------*/
+
+  int countErrorSendView = 0;
+
+  Future<void> sendView(int postId) async {
+    Map<String,dynamic> userInfo = json.decode(SheardHelper.getData('userInfo')!);
+    emit(LoadingSendViewNewsState());
+    countErrorSendView++;
+    try {
+      var response = await DioHelper.postData(
+          url: 'post/${postId}/view', data: {'user_id': userInfo['id']});
+      print(response!.data);
+      emit(SuccessSendViewNewsState());
+    } catch (e) {
+      print(e.toString());
+      if (countErrorSendView < 3) {
+        sendView(postId);
+      } else {
+        await LoggerHelper.saveLog(e.toString() +
+            " - [Class - controller/single/cubit] - [Method - sendView]");
+      }
+      try {
+        emit(ErrorSendViewNewsState());
+      } catch (e) {}
+    }
+  }
 }

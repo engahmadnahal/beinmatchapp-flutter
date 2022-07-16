@@ -51,5 +51,17 @@ class DioHelper {
     return await dio!.post(url!, data: data);
   }
 
+  static Future<Response>? postDataWithOutToken({
+    @required String? url,
+    @required Map<String, dynamic>? data,
+  }) async {
+    dio!.options.headers = {
+      'Accept': 'application/json',
+    };
+
+
+    return await dio!.post(url!, data: data);
+  }
+
 
 }

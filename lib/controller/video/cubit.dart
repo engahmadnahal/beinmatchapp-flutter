@@ -15,23 +15,41 @@ class VideoCubit extends Cubit<VideoState>{
   VideoCubit() : super(InitVideoState());
   static VideoCubit get(context) => BlocProvider.of(context);
 
+  int userCheckPoll = 0;
+
+  void startApp(MatchModel match){
+    userCheckPoll = match.poll_user_check!;
+    sumPersantPoll(
+      one: match.poll_to_club_one!,
+      draw: match.poll_to_darw!,
+      two: match.poll_to_club_two!
+    );
+    getAllComment(match.id!);
+    getStatusLikeUser(match.user_like_check!);
+    getVideo(match.channel!.channel_url!.urls![0]);
+  }
 
   /// --------------------------------- Player Widget And Controller --------------------------------
   bool isReady = false;
   var playerWidget;
-  void getVideo(String urls) async {
-    bool isM3u8 = urls.contains("m3u8");
+  /// [selectUrl] for check , and active button using toggle video url
+  String selectUrl = "";
+  late VideoPlayerController videoPlayerController;
+  late ChewieController chewieController;
+  void getVideo(String url) async {
+    selectUrl = url;
+    bool isM3u8 = url.contains("m3u8");
     try{
       emit(LoadingVideoState());
       /// Set Init VideoPlayerController
       /// And Add UsePermisstion IN MinfestAndroid , Then Start in Android Api
-      final VideoPlayerController videoPlayerController = VideoPlayerController.network('${urls}'
+       videoPlayerController = VideoPlayerController.network(url
           ,formatHint: isM3u8 ? VideoFormat.hls : VideoFormat.other)
       ..initialize().then((_) {
         print("Init Video ");
       });
       /// Player Controller for packge Chewie
-      ChewieController chewieController = ChewieController(
+       chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         autoPlay: false,
         looping: false,
@@ -50,6 +68,19 @@ class VideoCubit extends Cubit<VideoState>{
       isReady = false;
     }
 
+  }
+
+  void changVideo(String url){
+    getVideo(url);
+    emit(SuccessChangeVideoMatchState());
+  }
+
+  /// This override method in state class BlocBase , we using close the player when exit user in screen
+  @override
+  Future<void> close() async {
+    videoPlayerController.dispose();
+    chewieController.dispose();
+    super.close();
   }
 
   /*-------------------------------- {Start Check User isLike OR Not } --------------------------------*/
@@ -225,4 +256,90 @@ class VideoCubit extends Cubit<VideoState>{
       }
     }
   }
+
+  /*-------------------------------- {Start Send Poll } --------------------------------*/
+
+  int countErrorSendPoll = 0;
+
+  Future<void> sendPoll(int matchId, {
+    required bool one,
+    required bool draw,
+    required bool two,
+}) async {
+    /// Check and Change [userCheckPoll] when click user poll
+    int tempUserCheckPoll = userCheckPoll;
+    if(one){
+      userCheckPoll = 1;
+    }else if(draw){
+      userCheckPoll = 2;
+    }else if(two){
+      userCheckPoll = 3;
+    }
+
+    emit(LoadingSendPollMatchState());
+    countErrorSendPoll++;
+    try {
+      var response = await DioHelper.postData(
+          url: 'mobara/${matchId}/poll', data: {
+            'club_one': one ? 1 : 0,
+            'darw' : draw? 1 : 0,
+            'club_two' : two? 1 : 0
+          });
+      /// Get Response date from api and pass , to [sumPersantPoll] method
+      Map<String,dynamic> dataResp = response!.data['data'];
+      sumPersantPoll(one: dataResp['poll_to_club_one'], draw: dataResp['poll_to_darw'], two: dataResp['poll_to_club_two']);
+      emit(SuccessSendPollMatchState());
+    } catch (e) {
+      userCheckPoll = tempUserCheckPoll;
+      print(e.toString());
+      if (countErrorSendPoll < 3) {
+        sendPoll(matchId, one: one,draw: draw,two: draw);
+      } else {
+        await LoggerHelper.saveLog(e.toString() +
+            " - [Class - video/cubit] - [Method - sendComment]");
+      }
+      try {
+        emit(ErrorSendPollMatchState());
+      } catch (e) {}
+    }
+  }
+
+  Color colorPoll(String type){
+    if(userCheckPoll == 1 && type == "one"){
+      return Color(Config.primaryColor);
+    }else if(userCheckPoll == 2 && type == "draw"){
+      return Color(Config.primaryColor);
+    }else if(userCheckPoll == 3 && type == "two"){
+      return Color(Config.primaryColor);
+    }
+    return Color(Config.unActiveColor);
+  }
+
+  Color colorTextPoll(String type){
+    if(userCheckPoll == 1 && type == "one"){
+      return Colors.white;
+    }else if(userCheckPoll == 2 && type == "draw"){
+      return Colors.white;
+    }else if(userCheckPoll == 3 && type == "two"){
+      return Colors.white;
+    }
+    return Color(Config.primaryColor);
+  }
+
+/*-------------------------------- {Start Sum Poll & Persant } --------------------------------*/
+  int numPollOnePersant = 0;
+  int numPollDrawPersant = 0;
+  int numPollTwoPersant = 0;
+
+  void sumPersantPoll({
+    required int one,
+    required int draw,
+    required int two,
+  }){
+    int sumAllPool = (one + two + draw);
+    numPollOnePersant = (one ~/ sumAllPool).toInt() * 100 ;
+    numPollDrawPersant = (draw ~/ sumAllPool ).toInt() * 100 ;
+    numPollTwoPersant = (two ~/ sumAllPool).toInt() * 100 ;
+  }
+
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
@@ -26,11 +28,10 @@ void main() async {
   DioHelper.instanc();
   await SheardHelper.init();
   bool? isSkip = SheardHelper.getBool("skipBord");
-  String? token = SheardHelper.getData("userInfo");
+  String? userInfo = SheardHelper.getData("userInfo");
   Widget screen = OnBordingPage();
-
   if (isSkip == true || isSkip != null) {
-    if (token != null) {
+    if (userInfo != null) {
       screen = MainLayout();
     } else {
       screen = AuthLogin();
@@ -38,6 +39,9 @@ void main() async {
   } else {
     screen = OnBordingPage();
   }
+
+  /// Change Statues User isOnline or not
+  /// Check Setting for api , and store in sheard
   BlocOverrides.runZoned(() {
     runApp(MyApp(screen));
   }, blocObserver: myBlocObserver());
@@ -59,43 +63,65 @@ class MyApp extends StatelessWidget {
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
     ));
-
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => AppCubit()..getNews()..getClub()..getMatch()),
-        // BlocProvider(create: (context) => SingleNewsCubit()),
-
-        // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
+    return MaterialApp(
+      /**
+       * Localizations are a way to make your app support multiple languages.
+       * And Change Diraction to RTL to support RTL languages.
+       */
+      localizationsDelegates: const [
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
       ],
-      child: BlocConsumer<AppCubit, AppState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return MaterialApp(
-            /**
-             * Localizations are a way to make your app support multiple languages.
-             * And Change Diraction to RTL to support RTL languages.
-             */
-            localizationsDelegates: const [
-              GlobalCupertinoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: const  [
-              Locale('ar', 'AE'), 
-            ],
-            locale: const Locale('ar', 'AE'), 
-            title: 'Bein Match',
-            debugShowCheckedModeBanner: true,
-            theme: ThemeData(
-                primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
-            home: Directionality(
-              textDirection: TextDirection.rtl,
-              child: screen,
-            ),
-          );
-
-        },
+      supportedLocales: const  [
+        Locale('ar', 'AE'),
+      ],
+      locale: const Locale('ar', 'AE'),
+      title: 'Bein Match',
+      debugShowCheckedModeBanner: true,
+      theme: ThemeData(
+          primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: screen,
       ),
     );
+    // return MultiBlocProvider(
+    //   providers: [
+    //     BlocProvider(create: (context) => AppCubit()..getNews()..getClub()..getMatch()),
+    //     // BlocProvider(create: (context) => SingleNewsCubit()),
+    //
+    //     // BlocProvider(create: (context)=> MainLayoutCubit()..getNews()),
+    //   ],
+    //   child: BlocConsumer<AppCubit, AppState>(
+    //     listener: (context, state) {},
+    //     builder: (context, state) {
+    //       return MaterialApp(
+    //         /**
+    //          * Localizations are a way to make your app support multiple languages.
+    //          * And Change Diraction to RTL to support RTL languages.
+    //          */
+    //         localizationsDelegates: const [
+    //           GlobalCupertinoLocalizations.delegate,
+    //           GlobalMaterialLocalizations.delegate,
+    //           GlobalWidgetsLocalizations.delegate,
+    //         ],
+    //         supportedLocales: const  [
+    //           Locale('ar', 'AE'),
+    //         ],
+    //         locale: const Locale('ar', 'AE'),
+    //         title: 'Bein Match',
+    //         debugShowCheckedModeBanner: true,
+    //         theme: ThemeData(
+    //             primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
+    //         home: Directionality(
+    //           textDirection: TextDirection.rtl,
+    //           child: screen,
+    //         ),
+    //       );
+    //
+    //     },
+    //   ),
+    // );
   }
 }

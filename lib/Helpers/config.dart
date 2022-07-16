@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 class Config {
   // Setting For Api
   static const String api_url = "http://app.ahmadnahal.com/api/v1/";
+  static const String website_url = "https://www.bein-match.best/";
+
   
   // Setting For Style
   static int primaryColor = 0xFF07499F;

@@ -14,21 +14,20 @@ class MatchClub extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.all(10),
-        child: Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-              matchList(context,clubModel),
-              SizedBox(
-                height: 30,
-              ),
-            ],
-          ),
+            matchList(context,clubModel),
+            SizedBox(
+              height: 30,
+            ),
+          ],
         ),
       ),
     );

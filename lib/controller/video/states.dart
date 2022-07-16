@@ -30,4 +30,11 @@ class ErrorGetCommentMatchState extends VideoState {}
 class LoadingDeleteCommentMatchState extends VideoState {}
 class SuccessDeleteCommentMatchState extends VideoState {}
 class ErrorDeleteCommentMatchState extends VideoState {}
+///  State For Video Match
+class SuccessChangeVideoMatchState extends VideoState{}
+/// State Send For Poll Match
+class LoadingSendPollMatchState extends VideoState {}
+class SuccessSendPollMatchState extends VideoState {}
+class ErrorSendPollMatchState extends VideoState {}
+
 

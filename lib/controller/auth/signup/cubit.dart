@@ -36,7 +36,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         /**
          * Send Data For Api And Check If The User Exist
          */
-        var response = await DioHelper.postData(
+        var response = await DioHelper.postDataWithOutToken(
           url: 'user/signup',
           data: {
             'fname': fname,
