@@ -67,12 +67,10 @@ class FavoriteCubit extends Cubit<FavoriteState>  {
       response!.data['data'][0]['clubs'].forEach((e) => {
         clubs.add(ClubModel.fromJson(e)),
       });
-      print(response.data['data'][0]['clubs']);
       emit(SuccessClubFavoriteState());
     }catch(e){
       if(e is DioError){
         print(e.response!.data);
-        print(e.toString());
       }
       if(counterErrorGetClubData < 3){
         getAllClubs();

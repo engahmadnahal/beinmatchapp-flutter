@@ -156,6 +156,9 @@ class AuthSignUp extends StatelessWidget {
                               ),
                               Row(
                                 children: [
+                                  if(state is SignUpLoading)
+                                    Container(width: 20,height: 20,child: CircularProgressIndicator(color: Color(Config.primaryColor),strokeWidth: 2.0,)),
+                                  if(state is! SignUpLoading)
                                   Components.textButton(
                                     text: "تسجيل الأن",
                                     w: 180,

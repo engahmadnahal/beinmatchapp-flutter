@@ -9,7 +9,3 @@ class ErrorSettingState extends SettingState{}
 class LoadingRemoveFavoriteSettingState extends SettingState{}
 class SuccessRemoveFavoriteSettingState extends SettingState{}
 class ErrorRemoveFavoriteSettingState extends SettingState{}
-/// State for remove all favorite
-class LoadingModeSettingState extends SettingState{}
-class SuccessModeSettingState extends SettingState{}
-class ErrorModeSettingState extends SettingState{}

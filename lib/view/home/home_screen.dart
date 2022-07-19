@@ -21,7 +21,7 @@ class Home extends StatelessWidget   {
     // double xOff = -(MediaQuery.of(context).size.width / 3) * 2;
     
     return BlocProvider(
-      create: (context) => AppCubit()..getNews()..getClub()..getMatch(),
+      create: (context) => AppCubit()..getSetting()..getNews()..getClub()..getMatch(),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context,status){},
         builder: (context, status) {

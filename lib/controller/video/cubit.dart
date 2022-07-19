@@ -53,6 +53,7 @@ class VideoCubit extends Cubit<VideoState>{
         videoPlayerController: videoPlayerController,
         autoPlay: false,
         looping: false,
+        showOptions: false,
       );
 
       /// Assign [playerWidget] Widget Chewie Player with Controller
@@ -71,15 +72,19 @@ class VideoCubit extends Cubit<VideoState>{
   }
 
   void changVideo(String url){
+    disposePlayer();
     getVideo(url);
     emit(SuccessChangeVideoMatchState());
   }
 
+  void disposePlayer(){
+    videoPlayerController.dispose();
+    chewieController.dispose();
+  }
   /// This override method in state class BlocBase , we using close the player when exit user in screen
   @override
   Future<void> close() async {
-    videoPlayerController.dispose();
-    chewieController.dispose();
+    disposePlayer();
     super.close();
   }
 
@@ -336,10 +341,17 @@ class VideoCubit extends Cubit<VideoState>{
     required int draw,
     required int two,
   }){
-    int sumAllPool = (one + two + draw);
-    numPollOnePersant = (one ~/ sumAllPool).toInt() * 100 ;
-    numPollDrawPersant = (draw ~/ sumAllPool ).toInt() * 100 ;
-    numPollTwoPersant = (two ~/ sumAllPool).toInt() * 100 ;
+
+    try{
+      int sumAllPool = (one + two + draw);
+      if(sumAllPool > 0){
+        numPollOnePersant = (one ~/ sumAllPool).toInt() * 100 ;
+        numPollDrawPersant = (draw ~/ sumAllPool ).toInt() * 100 ;
+        numPollTwoPersant = (two ~/ sumAllPool).toInt() * 100 ;
+      }
+
+    }catch(e){}
+
   }
 
 }

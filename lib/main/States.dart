@@ -25,3 +25,7 @@ class ErrorGetMatchState extends AppState {}
 class LoadingGetTabClubState extends AppState {}
 class SuccessGetTabClubState extends AppState {}
 class ErrorGetTabClubState extends AppState {}
+/// States For Get ClubsOfTab IN Home Page News
+class LoadingGetSettingState extends AppState {}
+class SuccessGetSettingState extends AppState {}
+class ErrorGetSettingState extends AppState {}

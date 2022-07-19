@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/LoggerHelper.dart';
 import 'package:beinmatch/main/States.dart';
@@ -9,11 +11,27 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../Helpers/sheard_prefrancess.dart';
+
 class AppCubit extends Cubit<AppState>{
   AppCubit() : super(InitState());
   static AppCubit get(context) => BlocProvider.of(context);
 
 // ----------------------------------------{ Drawer Setting }--------------------------------------
+
+  void getSetting() async {
+    emit(LoadingGetSettingState());
+    try{
+      var response = await DioHelper.getData(url: 'setting');
+      String data = json.encode(response!.data);
+      await SheardHelper.setData('setting', data);
+    emit(SuccessGetSettingState());
+    }catch(e){
+      print(e);
+    await LoggerHelper.saveLog(e.toString() + " - [Class - main.dart] - [Method - getSetting]");
+    emit(ErrorGetSettingState());
+    }
+  }
 
   /*
     Cubit For Drawer Sidebar

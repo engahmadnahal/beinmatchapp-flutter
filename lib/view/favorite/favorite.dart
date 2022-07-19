@@ -121,75 +121,9 @@ class FavoriteScreen extends StatelessWidget {
                                 Builder(
                                   builder: (context){
                                     if(state is SuccessClubFavoriteState || FavoriteCubit.get(context).clubs.length > 0){
-                                      return ListView.separated(
-                                          physics: NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: FavoriteCubit.get(context).clubs.length,
-                                          itemBuilder: (context, index) {
-                                            return InkWell(
-                                              onTap: (){
-                                                Components.navigator(context: context,
-                                                    screen: SingleClub(FavoriteCubit.get(context).clubs[index].id));
-                                              },
-                                              child: Container(
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Row(
-                                                        children: [
-                                                          CircleAvatar(
-                                                            backgroundColor: Colors.white,
-                                                            backgroundImage:
-                                                            FadeInImage.assetNetwork(
-                                                              placeholder: Config.placeholderImage,
-                                                              image: "${FavoriteCubit.get(context).clubs[index].avater}",
-                                                            ).image,
-                                                            radius: 25,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 15,
-                                                          ),
-                                                          Text(
-                                                            "${FavoriteCubit.get(context).clubs[index].name}",
-                                                            style: TextStyle(
-                                                                color: Colors.black,
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 16),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed: () {
-                                                                FavoriteCubit.get(context).sendFavorite(context, FavoriteCubit.get(context).clubs[index].id!);
-                                                              },
-                                                              icon: Icon(
-                                                                Icons.favorite_sharp,
-                                                                color: Color(Config.primaryColor),
-                                                              ),
-                                                            ),
-                                                            Icon(
-                                                              Icons.arrow_forward_ios,
-                                                              color: Color(Config.primaryColor),
-                                                            ),
-                                                          ]),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return SizedBox(
-                                              height: 20,
-                                            );
-                                          });
-                                    }else {
+                                      return favoritList(context,FavoriteCubit.get(context).clubs);
+                                    }
+                                    else {
                                       return Center(child: CircularProgressIndicator(color: Color(Config.primaryColor),),);
                                     }
 
@@ -216,107 +150,85 @@ class FavoriteScreen extends StatelessWidget {
   }
 
   Widget favoritList(context,List<ClubModel> clubs){
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                child: Text(
-                  'جميع التفضيلات',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(Config.primaryColor),
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              ListView.separated(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: clubs.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: (){
-                        Components.navigator(context: context,
-                            screen: SingleClub(clubs[index].id));
-                      },
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    backgroundImage:
-                                    FadeInImage.assetNetwork(
-                                      placeholder: Config.placeholderImage,
-                                      image: "${clubs[index].avater}",
-                                    ).image,
-                                    radius: 25,
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    "${clubs[index].name}",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        FavoriteCubit.get(context).sendFavorite(context, FavoriteCubit.get(context).clubs[index].id!);
-                                      },
-                                      icon: Icon(
-                                        Icons.favorite_sharp,
-                                        color: Color(Config.primaryColor),
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Color(Config.primaryColor),
-                                    ),
-                                  ]),
-                            ),
-                          ],
+    if(clubs.isEmpty){
+      return Center(
+        child: Text('لايوجد تفضيلات !',style: TextStyle(
+            color: Color(Config.primaryColor),
+            fontSize: 15,
+            fontWeight: FontWeight.bold
+        ),),
+      );
+    }
+    return ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: clubs.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: (){
+              Components.navigator(context: context,
+                  screen: SingleClub(clubs[index].id));
+            },
+            child: Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          backgroundImage:
+                          FadeInImage.assetNetwork(
+                            placeholder: Config.placeholderImage,
+                            image: "${clubs[index].avater}",
+                          ).image,
+                          radius: 25,
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 20,
-                    );
-                  }),
-              SizedBox(
-                height: 30,
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          "${clubs[index].name}",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              FavoriteCubit.get(context).sendFavorite(context, FavoriteCubit.get(context).clubs[index].id!);
+                            },
+                            icon: Icon(
+                              Icons.favorite_sharp,
+                              color: Color(Config.primaryColor),
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(Config.primaryColor),
+                          ),
+                        ]),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            height: 20,
+          );
+        });
   }
+
+
 
 }

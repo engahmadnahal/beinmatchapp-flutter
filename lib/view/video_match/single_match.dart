@@ -1,7 +1,9 @@
+import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/controller/video/cubit.dart';
 import 'package:beinmatch/controller/video/states.dart';
 import 'package:beinmatch/model/match/match_model.dart';
+import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -141,12 +143,17 @@ class SingleMatch extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(child:
-                                Container(
-                                  width: 65,
-                                  height: 65,
-                                  child: Image(
-                                    image:
-                                    NetworkImage('${match.club_one!.logo}'),
+                                InkWell(
+                                  onTap: (){
+                                    Components.navigator(context: context, screen: SingleClub(match.club_one!.id));
+                                  },
+                                  child: Container(
+                                    width: 65,
+                                    height: 65,
+                                    child: Image(
+                                      image:
+                                      NetworkImage('${match.club_one!.logo}'),
+                                    ),
                                   ),
                                 )
                             ),
@@ -298,12 +305,17 @@ class SingleMatch extends StatelessWidget {
                               ),
                             ),
                             Expanded(child:
-                            Container(
-                              width: 65,
-                              height: 65,
-                              child: Image(
-                                image:
-                                NetworkImage('${match.club_two!.logo}'),
+                            InkWell(
+                              onTap: (){
+                                Components.navigator(context: context, screen: SingleClub(match.club_two!.id));
+                              },
+                              child: Container(
+                                width: 65,
+                                height: 65,
+                                child: Image(
+                                  image:
+                                  NetworkImage('${match.club_two!.logo}'),
+                                ),
                               ),
                             )
                             ),

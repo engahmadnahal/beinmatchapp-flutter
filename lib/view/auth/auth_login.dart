@@ -114,7 +114,10 @@ class AuthLogin extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Components.textButton(text: "الذهاب", onPressed: () {
+                                if(state is LoginLoading)
+                                  Container(width: 20,height: 20,child: CircularProgressIndicator(color: Color(Config.primaryColor),strokeWidth: 2.0,)),
+                                if(state is! LoginLoading)
+                                  Components.textButton(text: "الذهاب", onPressed: () {
                                   LoginCubit.get(context).login(context,formKey,email.value.text,password.value.text);
                                 }),
                                 Spacer(),
