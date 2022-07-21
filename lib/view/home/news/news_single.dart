@@ -46,6 +46,7 @@ class NewsSingle extends StatelessWidget {
                   SingleNewsCubit.get(context).zOff,
                 ),
                 child: Scaffold(
+                  backgroundColor: Colors.white,
                   body: NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [

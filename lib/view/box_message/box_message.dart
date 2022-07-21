@@ -34,6 +34,8 @@ class BoxMsg extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: Colors.white,
+
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
@@ -58,7 +60,6 @@ class BoxMsg extends StatelessWidget {
               ),
             ),
             body: Container(
-              color: Colors.white,
               child: LiquidPullToRefresh(
                 color: Color(Config.primaryColor),
                 springAnimationDurationInMilliseconds: 500,

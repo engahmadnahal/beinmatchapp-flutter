@@ -35,6 +35,8 @@ class Home extends StatelessWidget   {
               AppCubit.get(context).zOff,
             ),
             child: Scaffold(
+              backgroundColor: Colors.white,
+
               appBar: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 0,

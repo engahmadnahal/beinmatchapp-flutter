@@ -2,10 +2,13 @@ import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
+import 'package:beinmatch/firebase_options.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +16,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   /// Init helper
   DioHelper.instanc();
   await SheardHelper.init();
@@ -33,7 +38,7 @@ void main() async {
   } else {
     screen = OnBordingPage();
   }
-
+  FirebaseMessaging.instance.getToken().then((value) => print("Token : ${value}"));
   /// Logic
 
   /// Change Statues User isOnline or not

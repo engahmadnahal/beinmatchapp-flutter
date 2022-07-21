@@ -24,6 +24,8 @@ class Search extends StatelessWidget {
         listener: (context,state){},
         builder: (context,state){
           return Scaffold(
+            backgroundColor: Colors.white,
+
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
@@ -76,7 +78,6 @@ class Search extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
                 padding: EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

@@ -57,6 +57,9 @@ dependencies:
   chewie: ^1.3.4
   # Url
   url_launcher: ^6.1.5
+  # Firebase
+  firebase_core: ^1.19.2
+  firebase_messaging: ^12.0.0
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

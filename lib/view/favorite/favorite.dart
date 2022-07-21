@@ -33,6 +33,7 @@ class FavoriteScreen extends StatelessWidget {
                   FavoriteCubit.get(context).zOff,
                 ),
                 child: Scaffold(
+                  backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Colors.white,
@@ -85,7 +86,6 @@ class FavoriteScreen extends StatelessWidget {
                     ],
                   ),
                   body: Container(
-                    color: Colors.white,
                     height: MediaQuery.of(context).size.height,
                     child: LiquidPullToRefresh(
                       color: Color(Config.primaryColor),
