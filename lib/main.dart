@@ -18,6 +18,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  
   /// Init helper
   DioHelper.instanc();
   await SheardHelper.init();
