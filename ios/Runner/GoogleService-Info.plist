@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>780459729233-qpd9qnsm2umciicjvme55n7uc3i983kd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.780459729233-qpd9qnsm2umciicjvme55n7uc3i983kd</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCeQuW9DgeawV8fmhw-N3rvf0m19GvhlMA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>780459729233</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>best.beinmatch.beinmatch.beinmatch</string>
+	<key>PROJECT_ID</key>
+	<string>beinapp-v1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>beinapp-v1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:780459729233:ios:f44618bae2f4d353e77370</string>
+</dict>
+</plist>

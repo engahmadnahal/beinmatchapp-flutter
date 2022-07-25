@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "780459729233",
+    "project_id": "beinapp-v1",
+    "storage_bucket": "beinapp-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780459729233:android:b2e65d7905106e2ce77370",
+        "android_client_info": {
+          "package_name": "best.beinmatch.beinmatch.beinmatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "780459729233-jhk5sjpdee6t43khtvdevsc8d18boai4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPlz0raRRC0qjFtVZNkWWDWsGGkqZoTZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "780459729233-jhk5sjpdee6t43khtvdevsc8d18boai4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
