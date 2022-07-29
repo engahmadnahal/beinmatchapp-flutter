@@ -360,23 +360,23 @@ class Components {
                       style: TextStyle(
                           color: Color(Config.primaryColor),
                           fontWeight: FontWeight.bold,
-                          fontSize: 12),
+                          fontSize: 11),
                     ),
                   ),
                 ),
+
               ],
             ),
           ),
+          SizedBox(width: 5,),
           Expanded(
             flex: 1,
-            child: Container(
-              child: Text(
-                '$playing',
-                style: TextStyle(
-                    color: Color(Config.primaryColor),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
+            child: Text(
+              '$playing',
+              style: TextStyle(
+                  color: Color(Config.primaryColor),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
             ),
           ),
           Expanded(

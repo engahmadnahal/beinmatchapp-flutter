@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
@@ -9,8 +11,14 @@ import 'package:beinmatch/view/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class DrawerCustom extends StatelessWidget {
+class DrawerCustom extends StatefulWidget {
   DrawerCustom({Key? key}) : super(key: key);
+
+  @override
+  State<DrawerCustom> createState() => _DrawerCustomState();
+}
+
+class _DrawerCustomState extends State<DrawerCustom> {
   List<Map<String, dynamic>> dataDrawer = [
     {'title': "الرئيسية", 'icon': Icons.home,'screen':MainLayout()},
     {'title': "أخر الأخبار", 'icon': Icons.newspaper, 'screen': MainLayout()},
@@ -23,16 +31,29 @@ class DrawerCustom extends StatelessWidget {
     {'title': "تويتر", 'icon': FontAwesomeIcons.twitter},
     {'title': "يوتيوب", 'icon': FontAwesomeIcons.youtube},
     {'title': "تواصل", 'icon': FontAwesomeIcons.share},
-    
+
   ];
+
+  Map<String,dynamic>? userInfo;
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future(() async{
+      userInfo = await jsonDecode(SheardHelper.getData('userInfo')!);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Container(
           padding: EdgeInsets.only(right: 30, left: 30),
-          color: Colors.white,
+
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -55,7 +76,7 @@ class DrawerCustom extends StatelessWidget {
                       height: 15,
                     ),
                     Text(
-                      'أحمد عبدالله',
+                      '${userInfo?['fname']?? 'user'} ${userInfo?['lname']??'user'}',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

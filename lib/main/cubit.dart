@@ -25,11 +25,25 @@ class AppCubit extends Cubit<AppState>{
       var response = await DioHelper.getData(url: 'setting');
       String data = json.encode(response!.data);
       await SheardHelper.setData('setting', data);
-    emit(SuccessGetSettingState());
+      emit(SuccessGetSettingState());
     }catch(e){
       print(e);
-    await LoggerHelper.saveLog(e.toString() + " - [Class - main.dart] - [Method - getSetting]");
-    emit(ErrorGetSettingState());
+      await LoggerHelper.saveLog(e.toString() + " - [Class - main.dart] - [Method - getSetting]");
+      emit(ErrorGetSettingState());
+    }
+  }
+
+  void setStatUser() async {
+    emit(LoadingIsOnlineState());
+    try{
+      await DioHelper.postData(url: 'user/isonline', data: {
+        'isOnline' : 1
+      });
+      emit(SuccessIsOnlineState());
+    }catch(e){
+      print(e);
+      await LoggerHelper.saveLog(e.toString() + " - [Class - main] - [Method - setStatUser]");
+      emit(ErrorIsOnlineState());
     }
   }
 

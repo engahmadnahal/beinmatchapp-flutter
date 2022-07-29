@@ -29,3 +29,7 @@ class ErrorGetTabClubState extends AppState {}
 class LoadingGetSettingState extends AppState {}
 class SuccessGetSettingState extends AppState {}
 class ErrorGetSettingState extends AppState {}
+/// States For Stat User isOnline
+class LoadingIsOnlineState extends AppState {}
+class SuccessIsOnlineState extends AppState {}
+class ErrorIsOnlineState extends AppState {}

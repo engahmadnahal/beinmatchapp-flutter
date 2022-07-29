@@ -3,6 +3,8 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/model/club/single_club_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../video_match/single_match.dart';
+
 
 class MatchClub extends StatelessWidget {
   SingelClubModel clubModel;
@@ -22,8 +24,14 @@ class MatchClub extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+                matchList(context,clubModel),
 
-            matchList(context,clubModel),
+            // InkWell(
+            //   onTap: (){
+            //     Components.navigator(context: context, screen: SingleMatch(clubModel));
+            //   },
+            //     child: matchList(context,clubModel)
+            // ),
             SizedBox(
               height: 30,
             ),

@@ -1,7 +1,5 @@
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
-import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
-import 'package:beinmatch/controller/home/main/cubit.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
 import 'package:beinmatch/view/home/clubshome/club_home.dart';
@@ -11,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Home extends StatelessWidget   {
   Home({Key? key}) : super(key: key);
@@ -21,7 +18,7 @@ class Home extends StatelessWidget   {
     // double xOff = -(MediaQuery.of(context).size.width / 3) * 2;
     
     return BlocProvider(
-      create: (context) => AppCubit()..getSetting()..getNews()..getClub()..getMatch(),
+      create: (context) => AppCubit()..getSetting()..getNews()..getClub()..getMatch()..setStatUser(),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context,status){},
         builder: (context, status) {
@@ -35,6 +32,7 @@ class Home extends StatelessWidget   {
               AppCubit.get(context).zOff,
             ),
             child: Scaffold(
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 0,
@@ -94,15 +92,12 @@ class Home extends StatelessWidget   {
                   ],
                 ),
               ),
-              body: Container(
-                color: Colors.white,
-                child: TabBarView(
-                  children: [
-                    NewsHome(),
-                    MatchHome(),
-                    ClubHome(),
-                  ],
-                ),
+              body: TabBarView(
+                children: [
+                  NewsHome(),
+                  MatchHome(),
+                  ClubHome(),
+                ],
               ),
           
               // bottomNavigationBar : BottomNavigationBar(

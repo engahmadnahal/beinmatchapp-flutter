@@ -45,6 +45,7 @@ class SingleClub extends StatelessWidget {
                     ClubCubit.get(context).zOff,
                   ),
                   child: Scaffold(
+                    backgroundColor: Colors.white,
                     body: NestedScrollView(
                       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                         return [
@@ -193,22 +194,18 @@ class SingleClub extends StatelessWidget {
                           ),
                         ];
                       },
-                      body: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  DawryClub(clubData),
-                                  MatchClub(clubData),
-                                  ClubNews(clubData),
-                                ],
-                              ),
+                      body: Column(
+                        children: [
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                DawryClub(clubData),
+                                MatchClub(clubData),
+                                ClubNews(clubData),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

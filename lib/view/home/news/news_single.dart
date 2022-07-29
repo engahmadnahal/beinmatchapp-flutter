@@ -46,6 +46,7 @@ class NewsSingle extends StatelessWidget {
                   SingleNewsCubit.get(context).zOff,
                 ),
                 child: Scaffold(
+                  backgroundColor: Colors.white,
                   body: NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
@@ -127,14 +128,13 @@ class NewsSingle extends StatelessWidget {
                     body: SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(7),
+                              padding: const EdgeInsets.all(7),
                               child: Text(
                                 '${post!.title}',
                                 maxLines: 2,
@@ -145,7 +145,7 @@ class NewsSingle extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             Row(
@@ -318,7 +318,7 @@ class NewsSingle extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black)),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 25,
                             ),
                             Container(
@@ -332,7 +332,7 @@ class NewsSingle extends StatelessWidget {
                               ),
                             ),
                             ListView.separated(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: SingleNewsCubit.get(context)
                                   .getRecomPost
@@ -359,12 +359,12 @@ class NewsSingle extends StatelessWidget {
                                 );
                               },
                               separatorBuilder: (context, index) {
-                                return SizedBox(
+                                return const SizedBox(
                                   height: 15,
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             Stack(
@@ -398,7 +398,7 @@ class NewsSingle extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 IconButton(
@@ -418,12 +418,12 @@ class NewsSingle extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             if(SingleNewsCubit.get(context).commentPost != null)
                               commentList(SingleNewsCubit.get(context).commentPost!,state),
-                            SizedBox(
+                            const SizedBox(
                               height: 30,
                             ),
                           ],
@@ -471,13 +471,13 @@ class NewsSingle extends StatelessWidget {
               radius: 30,
               child: FadeInImage(
                 image: NetworkImage(
-                    '${coment.data[index].user!.avater ?? "http://app.ahmadnahal.com/assets/img/upload/media/login.png"}'),
+                    '${coment.data[index].user!.avater}'),
                 fit: BoxFit.cover,
-                placeholder: AssetImage(
+                placeholder: const AssetImage(
                     'assets/imgs/default_avater.png'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 15,
             ),
             Column(
@@ -490,33 +490,33 @@ class NewsSingle extends StatelessWidget {
                   children: [
                     Text(
                       "${coment.data[index].user!.name}",
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           fontWeight:
                           FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
                       "${coment.data[index].created_at}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
                     '${coment.data[index].content}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15,
                         color: Colors.black)),
               ],
             ),
-            Spacer(
+            const Spacer(
               flex: 1,
             ),
             if(userInfo['id'] == coment.data[index].user!.id)
@@ -525,7 +525,7 @@ class NewsSingle extends StatelessWidget {
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
-                        child: Text('تعديل'),
+                        child: const Text('تعديل'),
                         onTap: () {
                           updateCommentBotoomSheet(context,
                               postId: post!.id,
@@ -570,7 +570,7 @@ class NewsSingle extends StatelessWidget {
   }) {
     Scaffold.of(context).showBottomSheet(
       (context) => Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.white,
             boxShadow: [
               BoxShadow(
@@ -590,7 +590,7 @@ class NewsSingle extends StatelessWidget {
             children: [
               Center(
                 child: Container(
-                  margin: EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(25)),
@@ -598,35 +598,31 @@ class NewsSingle extends StatelessWidget {
                   height: 5,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
-              Container(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "تعديل التعليق",
-                    style: TextStyle(
-                        color: Color(Config.secondaryColor),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "تعديل التعليق",
+                  style: TextStyle(
+                      color: Color(Config.secondaryColor),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Form(
+                child: TextFormField(
+                  controller: updateCommentController,
+                  decoration: const InputDecoration(
+                    label: Text('تحديث التعليق'),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 25,
-              ),
-              Container(
-                child: Form(
-                  child: TextFormField(
-                    controller: updateCommentController,
-                    decoration: InputDecoration(
-                      label: Text('تحديث التعليق'),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               Align(

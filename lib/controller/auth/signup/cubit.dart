@@ -51,7 +51,8 @@ class SignUpCubit extends Cubit<SignUpState> {
         await SheardHelper.setData('userInfo', data);
 
         formKey.currentState.save();
-        Components.navigatorReplace(context: context, screen: MainLayout());
+        Navigator.pushReplacement(context, MaterialPageRoute(builder:  (contenxt)=>MainLayout()));
+        // Components.navigatorReplace(context: context, screen: MainLayout());
         emit(SignUpSuccess());
         /**
          * If The User Not Exist, We Can Show Error Message On Catch Error 

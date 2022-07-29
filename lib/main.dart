@@ -12,14 +12,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  MobileAds.instance.initialize();
 
-  
   /// Init helper
   DioHelper.instanc();
   await SheardHelper.init();
@@ -40,8 +42,22 @@ void main() async {
     screen = OnBordingPage();
   }
 
-  /// Logic
-  FirebaseMessaging.instance.getToken().then((value) => print("${value}"));
+  /// Logic FCM
+  bool? isSaveMobileToken = await SheardHelper.getBool('tokenMobiles');
+  bool isCond = isSaveMobileToken == null || isSaveMobileToken == false;
+  // bool isCond = true;
+  if(isCond){
+    FirebaseMessaging.instance.getToken().then((value) async {
+      try{
+        await DioHelper.postData(url: 'notification/token-mobile', data: {
+          'token' : '$value'
+        });
+        await SheardHelper.setBool('tokenMobiles', true);
+      }catch(e){
+        await SheardHelper.setBool('tokenMobiles', false);
+      }
+    });
+  }
   /// Change Statues User isOnline or not
   /// Check Setting for api , and store in sheard
   BlocOverrides.runZoned(() {
@@ -80,7 +96,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('ar', 'AE'),
       title: 'Bein Match',
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
       home: screen,

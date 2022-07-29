@@ -61,6 +61,10 @@ dependencies:
   firebase_core: ^1.19.2
   firebase_messaging: ^12.0.0
   firebase_analytics: ^9.2.1
+  # Ads
+  google_mobile_ads: ^2.0.0
+  # Inter Connection Checker
+  internet_connection_checker: ^0.0.1+4
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line
