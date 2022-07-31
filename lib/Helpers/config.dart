@@ -1,3 +1,4 @@
+import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/controller/onbording.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -34,4 +35,6 @@ class Config {
         body1: "يضم التطبيق مجتمع كبير من\n المتابعين والمتفاعلين على\n الأخبار والمباريات",
         body2: "وهذا يعطي حياة للمباراة"),
   ];
+
+
 }

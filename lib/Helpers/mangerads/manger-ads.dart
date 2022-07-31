@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MangerAd{
 
@@ -6,12 +7,14 @@ class MangerAd{
 
 
   /// Singleton pattern for init [MangerAd]
-  static final MangerAd? _instanc = null;
-  MangerAd get instanc {
+  static MangerAd? _instanc = null;
+
+  static MangerAd get instanc {
     if(_instanc == null){
-      return MangerAd();
+      _instanc = MangerAd();
+      return _instanc!;
     }
-    return MangerAd();
+    return _instanc!;
   }
 
 
@@ -32,9 +35,8 @@ class MangerAd{
       return "ca-app-pub-3948779118105482/9977012817";
     }else if(Platform.isIOS){
       return "==";
-    }else{
-      throw new UnsupportedError("This Platform is not supported !");
     }
+      throw new UnsupportedError("This Platform is not supported !");
   }
 
   String get popup {
@@ -49,9 +51,23 @@ class MangerAd{
     }
   }
 
+
+  /// This ads in not ready use
   String get content {
     if(_isTestMode){
       return "ca-app-pub-3940256099942544/2247696110";
+    }else if(Platform.isAndroid){
+      return "ca-app-pub-3948779118105482/4113477897";
+    }else if(Platform.isIOS){
+      return "==";
+    }else{
+      throw new UnsupportedError("This Platform is not supported !");
+    }
+  }
+
+  String get interstitial {
+    if(_isTestMode){
+      return "ca-app-pub-3940256099942544/8691691433";
     }else if(Platform.isAndroid){
       return "ca-app-pub-3948779118105482/4113477897";
     }else if(Platform.isIOS){

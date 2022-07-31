@@ -1,12 +1,8 @@
 import 'package:beinmatch/Helpers/components/components.dart';
 import 'package:beinmatch/Helpers/config.dart';
-import 'package:beinmatch/controller/home/main/cubit.dart';
-import 'package:beinmatch/controller/home/main/stats.dart';
-import 'package:beinmatch/controller/home/news/cubit.dart';
-import 'package:beinmatch/controller/home/news/stats.dart';
+import 'package:beinmatch/Helpers/mangerads/factory_manger_ads.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/main/cubit.dart';
-import 'package:beinmatch/model/club/club_model.dart';
 import 'package:beinmatch/view/errors/get_data.dart';
 import 'package:beinmatch/view/home/clubs/single/single_club.dart';
 import 'package:beinmatch/view/home/news/load_data.dart';
@@ -52,11 +48,13 @@ class NewsHome extends StatelessWidget {
                       items: AppCubit.get(context).getPosts.map((e) {
                         return InkWell(
                           onTap: (){
+
                             Components.navigator(
                                 context: context,
                                 screen: NewsSingle(
                                   post: e,
                                 ));
+
                           },
                           child: Stack(
                             alignment: AlignmentDirectional.bottomCenter,
@@ -112,6 +110,8 @@ class NewsHome extends StatelessWidget {
                     SizedBox(
                       height: 30,
                     ),
+                    FactoryAds.instanc.createFactoryAd(FactoryAds.BANER_AD),
+                    SizedBox(height: 10,),
                     Container(
                       width: MediaQuery.of(context).size.width - 20,
                       height: 120,
@@ -120,6 +120,7 @@ class NewsHome extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
+
                             return InkWell(
                               onTap: (){
                                 Components.navigator(context: context, screen: SingleClub(AppCubit.get(context).clubs[index].id));
@@ -174,25 +175,37 @@ class NewsHome extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: AppCubit.get(context).getPosts.length,
                         itemBuilder: (context, index) {
+                          // if(index == AppCubit.get(context).getPosts.length - 1){
+                          //   return Center(child: CircularProgressIndicator(color: Color(Config.primaryColor),),);
+                          // }
                           return InkWell(
                             onTap: (){
                               Components.navigator(context: context, screen: NewsSingle(
                                 post: AppCubit.get(context).getPosts[index],
                               ));
                             },
-                            child: Components.post(
-                              context: context,
-                              image: "${AppCubit.get(context).getPosts[index].thumnail}",
-                              title: "${AppCubit.get(context).getPosts[index].title}",
-                              created_at: "${AppCubit.get(context).getPosts[index].created_at}",
-                              tags: "${AppCubit.get(context).getPosts[index].dawry!.name}",
+                            child: Column(
+                              children: [
+                                if(index%3 == 1)
+                                  FactoryAds.instanc.createFactoryAd(FactoryAds.BANER_AD),
+                                SizedBox(height: 10,),
+                                Components.post(
+                                  context: context,
+                                  image: "${AppCubit.get(context).getPosts[index].thumnail}",
+                                  title: "${AppCubit.get(context).getPosts[index].title}",
+                                  created_at: "${AppCubit.get(context).getPosts[index].created_at}",
+                                  tags: "${AppCubit.get(context).getPosts[index].dawry!.name}",
+                                ),
+                              ],
                             ),
                           );
                         },
                         separatorBuilder: (context, index) {
+
                           return SizedBox(
                             height: 20,
                           );
+
                         },
                       ),
                     ),

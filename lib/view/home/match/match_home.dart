@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../../Helpers/convert_time_match.dart';
+import '../../../Helpers/mangerads/factory_manger_ads.dart';
+import '../../../Helpers/mangerads/interstitial.dart';
 
 class MatchHome extends StatelessWidget {
   MatchHome({Key? key}) : super(key: key);
@@ -185,6 +187,8 @@ class MatchHome extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: (){
+            // AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD) as AdInterstitial;
+            // adInterstitial.showInterstitialAd();
             Components.navigator(context: context, screen: SingleMatch(matches[index]));
           },
           child: Components.matchesComponent(

@@ -466,7 +466,7 @@ class SingleMatch extends StatelessWidget {
           ],
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      height: MediaQuery.of(context).size.height / 3 + 80,
+      height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
       child: Container(
         padding: const EdgeInsets.all(25),

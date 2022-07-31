@@ -2,15 +2,19 @@ import 'dart:convert';
 
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/LoggerHelper.dart';
+import 'package:beinmatch/Helpers/components/components.dart';
+import 'package:beinmatch/Helpers/mangerads/factory_manger_ads.dart';
 import 'package:beinmatch/main/States.dart';
 import 'package:beinmatch/model/club/club_model.dart';
 import 'package:beinmatch/model/match/match_model.dart';
 import 'package:beinmatch/model/news/news_model.dart';
+import 'package:beinmatch/view/errors/block_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../Helpers/mangerads/interstitial.dart';
 import '../Helpers/sheard_prefrancess.dart';
 
 class AppCubit extends Cubit<AppState>{
@@ -33,12 +37,18 @@ class AppCubit extends Cubit<AppState>{
     }
   }
 
-  void setStatUser() async {
+  void setStatUser(context) async {
     emit(LoadingIsOnlineState());
     try{
-      await DioHelper.postData(url: 'user/isonline', data: {
-        'isOnline' : 1
-      });
+      
+      var response = await DioHelper.getData(url: 'user/status');
+        if(response!.data['status'] != "active"){
+            Components.navigatorReplace(context: context, screen: BlockScreen());
+            return;
+        }
+        await DioHelper.postData(url: 'user/isonline', data: {
+          'isOnline' : 1
+        });
       emit(SuccessIsOnlineState());
     }catch(e){
       print(e);
@@ -91,6 +101,7 @@ class AppCubit extends Cubit<AppState>{
   int counterErrorGetNews = 0;
 
   void getNews() async {
+
     emit(LoadingNewsState());
     posts.clear();
     counterErrorGetNews++;
@@ -100,11 +111,10 @@ class AppCubit extends Cubit<AppState>{
         posts.add(Post.fromJson(e)),
       });
       emit(SuccessNewsState());
+
     } catch (e) {
-      print(e);
-      print("hear");
       if(e is DioError){
-        print(e.toString());
+        print(e.response!.data);
       }
       if (counterErrorGetNews < 3) {
         getNews();
@@ -150,6 +160,8 @@ class AppCubit extends Cubit<AppState>{
   int counterErrorGetMatch = 0;
 
   void getMatch() async {
+    AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD);
+    adInterstitial.loadInterstitialAd();
     emit(LoadingGetMatchState());
     counterErrorGetMatch++;
     try {

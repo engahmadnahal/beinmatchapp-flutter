@@ -65,6 +65,8 @@ dependencies:
   google_mobile_ads: ^2.0.0
   # Inter Connection Checker
   internet_connection_checker: ^0.0.1+4
+  #Notification OverLay
+  overlay_support: ^2.0.1
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

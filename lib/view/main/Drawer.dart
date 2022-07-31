@@ -5,11 +5,15 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:beinmatch/view/favorite/favorite.dart';
-import 'package:beinmatch/view/home/clubs/club.dart';
 import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/setting/setting.dart';
+import 'package:beinmatch/view/support/support.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/link.dart';
+
+import '../../Helpers/DioHelper.dart';
+import '../../Helpers/end_point/api.dart';
 
 class DrawerCustom extends StatefulWidget {
   DrawerCustom({Key? key}) : super(key: key);
@@ -23,24 +27,22 @@ class _DrawerCustomState extends State<DrawerCustom> {
     {'title': "الرئيسية", 'icon': Icons.home,'screen':MainLayout()},
     {'title': "أخر الأخبار", 'icon': Icons.newspaper, 'screen': MainLayout()},
     {'title': "التفضيلات", 'icon': Icons.favorite_border, 'screen': FavoriteScreen()},
-    // {'title': "البطولات", 'icon': Icons.sports_soccer_outlined,'screen':Home()},
-    // {'title': "الفرق الرياضية", 'icon': Icons.sports_kabaddi_outlined,'screen':ClubScreen()},
     {'title': "الاعدادات", 'icon': Icons.settings_outlined,'screen':SettingScreen()},
     {'title': "خروج", 'icon': Icons.exit_to_app,'screen':AuthLogin()},
     {'title': "فيس بوك", 'icon': Icons.facebook_outlined},
     {'title': "تويتر", 'icon': FontAwesomeIcons.twitter},
     {'title': "يوتيوب", 'icon': FontAwesomeIcons.youtube},
-    {'title': "تواصل", 'icon': FontAwesomeIcons.share},
+    {'title': "تواصل", 'icon': FontAwesomeIcons.share,'screen':SupportScreen()},
 
   ];
 
   Map<String,dynamic>? userInfo;
+  late Map<String,dynamic> settingApp;
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
-    Future(() async{
-      userInfo = await jsonDecode(SheardHelper.getData('userInfo')!);
-    });
+    userInfo = jsonDecode(SheardHelper.getData('userInfo')!);
+    settingApp =  jsonDecode(SheardHelper.getData('setting')!);
     super.initState();
   }
 
@@ -97,11 +99,22 @@ class _DrawerCustomState extends State<DrawerCustom> {
                         shrinkWrap: true,
                         itemCount: dataDrawer.length,
                         itemBuilder: (context, index) {
+                          if(index == 5){
+                          // facebook
+                            return LinkWidget(settingApp['facebook'],index);
+                          }else if(index == 6){
+                          // twitter
+                            return LinkWidget(settingApp['twitter'],index);
+                          }else if(index == 7){
+                          // youtube
+                            return LinkWidget(settingApp['youtube'],index);
+                          }
                           return InkWell(
                             onTap: (){
-                              if(index == 6){
-                                SheardHelper.removeData('userInfo');
-                                Components.navigator(context: context, screen: dataDrawer[index]['screen']);
+                              if(index == 4){
+                                Future(() async {
+                                  await RequstApi.logout(context);
+                                });
                               }else{
                                 Components.navigator(context: context, screen: dataDrawer[index]['screen']);
                               }
@@ -145,6 +158,35 @@ class _DrawerCustomState extends State<DrawerCustom> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget LinkWidget(String url , int index){
+    return Link(
+      uri: Uri.parse(url),
+      target: LinkTarget.blank,
+      builder: (context, followLink) => InkWell(
+        onTap: followLink,
+        child: Row(
+          children: [
+            Icon(
+              dataDrawer[index]["icon"],
+              color: Color(Config.primaryColor),
+              size: 25,
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              '${dataDrawer[index]["title"]}',
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(Config.primaryColor)),
+            )
+          ],
         ),
       ),
     );

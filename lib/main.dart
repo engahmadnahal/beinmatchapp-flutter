@@ -3,6 +3,7 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
+import 'package:beinmatch/view/errors/block_screen.dart';
 import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
 import 'package:bloc/bloc.dart';
@@ -13,14 +14,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'firebase_options.dart';
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+await Firebase.initializeApp();
+}
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  MobileAds.instance.initialize();
 
   /// Init helper
   DioHelper.instanc();
@@ -44,10 +52,11 @@ void main() async {
 
   /// Logic FCM
   bool? isSaveMobileToken = await SheardHelper.getBool('tokenMobiles');
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   bool isCond = isSaveMobileToken == null || isSaveMobileToken == false;
   // bool isCond = true;
   if(isCond){
-    FirebaseMessaging.instance.getToken().then((value) async {
+    messaging.getToken().then((value) async {
       try{
         await DioHelper.postData(url: 'notification/token-mobile', data: {
           'token' : '$value'
@@ -58,12 +67,42 @@ void main() async {
       }
     });
   }
-  /// Change Statues User isOnline or not
-  /// Check Setting for api , and store in sheard
+
+   await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((event) {
+    showSimpleNotification(
+        Text(event.data['v1']),
+        subtitle: Text(event.data['v2']),
+        duration: Duration(seconds: 3),
+        background: Color(Config.primaryColor));
+
+  });
+
+  // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+  //
+  // });
+
+FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+
+/// End FCM Logic
+
   BlocOverrides.runZoned(() {
     runApp(MyApp(screen));
   }, blocObserver: myBlocObserver());
 }
+
+
+
 
 class MyApp extends StatelessWidget {
   Widget screen;
@@ -81,25 +120,27 @@ class MyApp extends StatelessWidget {
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness: Brightness.dark,
     ));
-    return MaterialApp(
-      /**
-       * Localizations are a way to make your app support multiple languages.
-       * And Change Diraction to RTL to support RTL languages.
-       */
-      localizationsDelegates: const [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const  [
-        Locale('ar', 'AE'),
-      ],
-      locale: const Locale('ar', 'AE'),
-      title: 'Bein Match',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
-      home: screen,
+    return OverlaySupport.global(
+      child: MaterialApp(
+        /**
+         * Localizations are a way to make your app support multiple languages.
+         * And Change Diraction to RTL to support RTL languages.
+         */
+        localizationsDelegates: const [
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const  [
+          Locale('ar', 'AE'),
+        ],
+        locale: const Locale('ar', 'AE'),
+        title: 'Bein Match',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
+        home: screen,
+      ),
     );
   }
 }

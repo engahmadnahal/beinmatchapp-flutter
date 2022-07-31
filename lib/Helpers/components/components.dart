@@ -7,6 +7,8 @@ import 'package:beinmatch/view/search/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+
 class Components {
   static List<Widget>? appBarActions({
     required context,

@@ -7,6 +7,7 @@ import 'package:beinmatch/view/auth/auth_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Helpers/LoggerHelper.dart';
+import '../../Helpers/end_point/api.dart';
 import '../../Helpers/sheard_prefrancess.dart';
 
 
@@ -53,8 +54,7 @@ class SettingCubit extends Cubit<SettingState>{
   void logOut(context) async{
     try{
       emit(LoadingSettingState());
-      await SheardHelper.removeData('userInfo');
-      Components.navigatorReplace(context: context, screen: AuthLogin());
+      RequstApi.logout(context);
       emit(SuccessSettingState());
     }catch(e){
       emit(ErrorSettingState());

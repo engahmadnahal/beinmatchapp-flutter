@@ -11,21 +11,6 @@ import '../../controller/box_messag/cubit.dart';
 class BoxMsg extends StatelessWidget {
   BoxMsg({Key? key}) : super(key: key);
 
-  List<Map<String, dynamic>> msg = [
-    {
-      'title': 'بداية كأس العالم',
-      'body': 'شاهد الان بداية كاس العالم',
-    },
-    {
-      'title': 'خسارة مدوية',
-      'body': 'خسارة فريق ريال مدريد امام ليفربول',
-    },
-    {
-      'title': 'فوز باكتساح',
-      'body': 'فاز اليوم فريق فلسطين بكأس العالم',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,6 +19,7 @@ class BoxMsg extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
@@ -67,10 +53,8 @@ class BoxMsg extends StatelessWidget {
                 },
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

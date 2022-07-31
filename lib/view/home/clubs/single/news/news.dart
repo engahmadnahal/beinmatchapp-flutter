@@ -48,7 +48,7 @@ class ClubNews extends StatelessWidget {
     );
   }
   Widget newsList(context,SingelClubModel clubModel){
-    if(clubModel.matches!.isEmpty){
+    if(clubModel.posts!.isEmpty){
       return Container(
         height: MediaQuery.of(context).size.height / 2,
         child: Center(
