@@ -43,6 +43,12 @@ class LoginCubit extends Cubit<LoginState> {
         String data = json.encode(response!.data['data']);
         await SheardHelper.setData('userInfo', data);
         formKey.currentState.save();
+
+        /// Get Setting App
+        var responseSetting = await DioHelper.getData(url: 'setting');
+        String dataSetting = json.encode(responseSetting!.data);
+        await SheardHelper.setData('setting', dataSetting);
+
         Navigator.pushReplacement(context, MaterialPageRoute(builder:  (contenxt)=>MainLayout()));
         // Components.navigatorReplace(context: context, screen: MainLayout());
         emit(LoginSuccess());

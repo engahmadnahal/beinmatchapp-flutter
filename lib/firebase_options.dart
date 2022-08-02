@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBPlz0raRRC0qjFtVZNkWWDWsGGkqZoTZs',
-    appId: '1:780459729233:android:b2e65d7905106e2ce77370',
+    appId: '1:780459729233:android:3a0fd2eec5fce912e77370',
     messagingSenderId: '780459729233',
     projectId: 'beinapp-v1',
     storageBucket: 'beinapp-v1.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCeQuW9DgeawV8fmhw-N3rvf0m19GvhlMA',
-    appId: '1:780459729233:ios:f44618bae2f4d353e77370',
+    appId: '1:780459729233:ios:0d05fc65ea9c69d6e77370',
     messagingSenderId: '780459729233',
     projectId: 'beinapp-v1',
     storageBucket: 'beinapp-v1.appspot.com',
-    iosClientId: '780459729233-qpd9qnsm2umciicjvme55n7uc3i983kd.apps.googleusercontent.com',
-    iosBundleId: 'best.beinmatch.beinmatch.beinmatch',
+    iosClientId: '780459729233-qfpsl6aqc1faq4i4lc9hc09euau2n66s.apps.googleusercontent.com',
+    iosBundleId: 'org.beinmatch',
   );
 }

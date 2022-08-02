@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:780459729233:android:b2e65d7905106e2ce77370",
+        "mobilesdk_app_id": "1:780459729233:android:3a0fd2eec5fce912e77370",
         "android_client_info": {
-          "package_name": "best.beinmatch.beinmatch.beinmatch"
+          "package_name": "org.beinmatch"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "780459729233-jhk5sjpdee6t43khtvdevsc8d18boai4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "780459729233-qfpsl6aqc1faq4i4lc9hc09euau2n66s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.beinmatch"
+              }
             }
           ]
         }

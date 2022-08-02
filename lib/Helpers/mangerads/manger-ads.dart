@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:beinmatch/Helpers/config.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MangerAd{
 
-  bool _isTestMode = true;
-
+  final bool _isTestMode = !Config.isProduction;
 
   /// Singleton pattern for init [MangerAd]
   static MangerAd? _instanc = null;

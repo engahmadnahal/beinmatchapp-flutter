@@ -3,7 +3,6 @@ import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
 import 'package:beinmatch/Helpers/sheard_prefrancess.dart';
 import 'package:beinmatch/view/auth/auth_login.dart';
-import 'package:beinmatch/view/errors/block_screen.dart';
 import 'package:beinmatch/view/main/main_layout.dart';
 import 'package:beinmatch/view/onbording/onbordingpage.dart';
 import 'package:bloc/bloc.dart';
@@ -62,6 +61,7 @@ void main() async {
         await DioHelper.postData(url: 'notification/token-mobile', data: {
           'token' : '$value'
         });
+        print("Token : $value ====");
         await SheardHelper.setBool('tokenMobiles', true);
       }catch(e){
         await SheardHelper.setBool('tokenMobiles', false);
