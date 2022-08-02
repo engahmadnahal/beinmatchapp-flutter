@@ -37,4 +37,8 @@ class LoadingSendPollMatchState extends VideoState {}
 class SuccessSendPollMatchState extends VideoState {}
 class ErrorSendPollMatchState extends VideoState {}
 
+class LoadingSendViewNewsState extends VideoState{}
+class SuccessSendViewNewsState extends VideoState{}
+class ErrorSendViewNewsState extends VideoState{}
+
 

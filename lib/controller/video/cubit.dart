@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/LoggerHelper.dart';
 import 'package:beinmatch/Helpers/components/components.dart';
@@ -10,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/src/chewie_player.dart';
+
+import '../../Helpers/sheard_prefrancess.dart';
 
 class VideoCubit extends Cubit<VideoState>{
   VideoCubit() : super(InitVideoState());
@@ -27,6 +31,7 @@ class VideoCubit extends Cubit<VideoState>{
     getAllComment(match.id!);
     getStatusLikeUser(match.user_like_check!);
     getVideo(match.channel!.channel_url!.urls![0]);
+    sendView(match.id!);
   }
 
   /// --------------------------------- Player Widget And Controller --------------------------------
@@ -352,6 +357,32 @@ class VideoCubit extends Cubit<VideoState>{
 
     }catch(e){}
 
+  }
+
+
+  /*-------------------------------- {Start Send View Post} --------------------------------*/
+
+  int countErrorSendView = 0;
+
+  Future<void> sendView(int matchId) async {
+    Map<String,dynamic> userInfo = json.decode(SheardHelper.getData('userInfo')!);
+    emit(LoadingSendViewNewsState());
+    countErrorSendView++;
+    try {
+      var response = await DioHelper.postData(
+          url: 'mobara/${matchId}/view', data: {'user_id': userInfo['id']});
+      emit(SuccessSendViewNewsState());
+    } catch (e) {
+      if (countErrorSendView < 3) {
+        sendView(matchId);
+      } else {
+        await LoggerHelper.saveLog(e.toString() +
+            " - [Class - controller/video/cubit] - [Method - sendView]");
+      }
+      try {
+        emit(ErrorSendViewNewsState());
+      } catch (e) {}
+    }
   }
 
 }

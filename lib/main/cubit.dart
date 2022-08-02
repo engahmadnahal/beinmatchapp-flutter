@@ -10,10 +10,10 @@ import 'package:beinmatch/model/match/match_model.dart';
 import 'package:beinmatch/model/news/news_model.dart';
 import 'package:beinmatch/view/errors/block_screen.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../Helpers/end_point/api.dart';
 import '../Helpers/mangerads/interstitial.dart';
 import '../Helpers/sheard_prefrancess.dart';
 
@@ -31,7 +31,6 @@ class AppCubit extends Cubit<AppState>{
       await SheardHelper.setData('setting', data);
       emit(SuccessGetSettingState());
     }catch(e){
-      print(e);
       await LoggerHelper.saveLog(e.toString() + " - [Class - main.dart] - [Method - getSetting]");
       emit(ErrorGetSettingState());
     }
@@ -41,17 +40,13 @@ class AppCubit extends Cubit<AppState>{
     emit(LoadingIsOnlineState());
     try{
       
-      var response = await DioHelper.getData(url: 'user/status');
-        if(response!.data['status'] != "active"){
+      var response = await RequstApi.getStatusUser();
+        if(response != "active"){
             Components.navigatorReplace(context: context, screen: BlockScreen());
-            return;
         }
-        await DioHelper.postData(url: 'user/isonline', data: {
-          'isOnline' : 1
-        });
+        await RequstApi.sendIsOnline(1);
       emit(SuccessIsOnlineState());
     }catch(e){
-      print(e);
       await LoggerHelper.saveLog(e.toString() + " - [Class - main] - [Method - setStatUser]");
       emit(ErrorIsOnlineState());
     }
@@ -66,7 +61,6 @@ class AppCubit extends Cubit<AppState>{
   double zOff = 0;
 
   void openDrawer(context) {
-    print('Comming Drawer');
     emit(LoadingMainLayoutDrawerState());
     isOpenDrawer = !isOpenDrawer;
     try {
@@ -113,9 +107,6 @@ class AppCubit extends Cubit<AppState>{
       emit(SuccessNewsState());
 
     } catch (e) {
-      if(e is DioError){
-        print(e.response!.data);
-      }
       if (counterErrorGetNews < 3) {
         getNews();
       } else {
@@ -142,7 +133,6 @@ class AppCubit extends Cubit<AppState>{
       });
       emit(SuccessGetClubState());
     } catch (e) {
-      print(e);
       if (counterErrorGetClub < 3) {
         getClub();
       } else {
@@ -160,8 +150,10 @@ class AppCubit extends Cubit<AppState>{
   int counterErrorGetMatch = 0;
 
   void getMatch() async {
-    AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD);
-    adInterstitial.loadInterstitialAd();
+    try{
+      AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD);
+      adInterstitial.loadInterstitialAd();
+    }catch(e){}
     emit(LoadingGetMatchState());
     counterErrorGetMatch++;
     try {
@@ -171,7 +163,6 @@ class AppCubit extends Cubit<AppState>{
       });
       emit(SuccessGetMatchState());
     } catch (e) {
-      print(e);
       if (counterErrorGetMatch < 3) {
         getClub();
       } else {
@@ -181,28 +172,4 @@ class AppCubit extends Cubit<AppState>{
     }
   }
 
-  /// ------------------------------------------- {Controller For Get Club in Home Page News of A Tab} -------------
-  // List<ClubModel> clubsTab = [];
-  // /// Number of trying get data in api
-  // int counterErrorGetClubTab = 0;
-  //
-  // void getClubOfTab() async {
-  //   emit(LoadingGetTabClubState());
-  //   counterErrorGetClubTab++;
-  //   try {
-  //     var response = await DioHelper.getData(url: 'clubs');
-  //     response!.data['data'].forEach((e) => {
-  //       clubsTab.add(ClubModel.fromJson(e)),
-  //     });
-  //     emit(SuccessGetTabClubState());
-  //   } catch (e) {
-  //     print(e);
-  //     if (counterErrorGetClubTab < 3) {
-  //       getClub();
-  //     } else {
-  //       await LoggerHelper.saveLog(e.toString() + " - [Class - main/cubit] - [Method - getClubOfTab]");
-  //       try{emit(ErrorGetTabClubState());}catch(e){}
-  //     }
-  //   }
-  // }
 }

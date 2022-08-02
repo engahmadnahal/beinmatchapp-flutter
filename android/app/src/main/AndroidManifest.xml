@@ -19,7 +19,7 @@
         </intent>
     </queries>
    <application
-        android:label="beinmatch"
+        android:label="Bein Match"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

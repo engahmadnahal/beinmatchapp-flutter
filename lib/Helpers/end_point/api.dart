@@ -13,4 +13,15 @@ class RequstApi{
 
     }
   }
+
+  static sendIsOnline(int status) async {
+    await DioHelper.postData(url: 'user/isonline', data: {
+      'isOnline' : status
+    });
+  }
+
+  static Future<String> getStatusUser() async{
+    var response = await DioHelper.getData(url: 'user/status');
+    return response!.data['status'];
+  }
 }

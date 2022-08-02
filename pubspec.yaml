@@ -67,6 +67,8 @@ dependencies:
   internet_connection_checker: ^0.0.1+4
   #Notification OverLay
   overlay_support: ^2.0.1
+  # For rename app
+  rename: ^2.0.1
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line
@@ -88,6 +90,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+
+  flutter_launcher_icons: "^0.9.2"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/imgs/app_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

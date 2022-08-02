@@ -246,12 +246,15 @@ class Components {
                 const SizedBox(
                   width: 10,
                 ),
-                Text(
-                  name1,
-                  style: TextStyle(
-                      color: Color(Config.primaryColor),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    name1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(Config.primaryColor),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
                 )
               ],
             ),
@@ -275,12 +278,15 @@ class Components {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  name2,
-                  style: TextStyle(
-                      color: Color(Config.primaryColor),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    name2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(Config.primaryColor),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(
                   width: 10,

@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'Helpers/end_point/api.dart';
 import 'firebase_options.dart';
 
 
@@ -35,10 +36,10 @@ void main() async {
   await SheardHelper.init();
 
   /// Variables
-  bool? isSkip = SheardHelper.getBool("skipBord");
-  String? userInfo = SheardHelper.getData("userInfo");
-  Widget screen = OnBordingPage();
+  bool? isSkip =  SheardHelper.getBool("skipBord");
+  String? userInfo =  SheardHelper.getData("userInfo");
 
+  Widget screen = OnBordingPage();
   /// Logic
   if (isSkip == true || isSkip != null) {
     if (userInfo != null) {
@@ -104,11 +105,48 @@ FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   Widget screen;
   MyApp(this.screen, {Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // This widget is the root of your application.
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    bool isBackground = state == AppLifecycleState.paused;
+    bool isResumed= state == AppLifecycleState.resumed;
+
+    if(isBackground){
+      Future(() async{
+        await RequstApi.sendIsOnline(0);
+      });
+    }
+
+    if(isResumed){
+      Future(() async{
+        await RequstApi.sendIsOnline(1);
+      });
+    }
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     /**
@@ -139,7 +177,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primarySwatch: Colors.blue, fontFamily: Config.primaryFont),
-        home: screen,
+        home: widget.screen,
       ),
     );
   }
