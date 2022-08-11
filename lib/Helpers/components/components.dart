@@ -130,6 +130,8 @@ class Components {
     SnackBar snackBar = SnackBar(
       content: Text("$text"),
       backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(milliseconds: 600),
     );
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
