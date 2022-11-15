@@ -10,6 +10,7 @@ import 'package:beinmatch/model/match/match_model.dart';
 import 'package:beinmatch/model/news/news_model.dart';
 import 'package:beinmatch/view/errors/block_screen.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -159,6 +160,7 @@ class AppCubit extends Cubit<AppState>{
     counterErrorGetMatch++;
     try {
       var response = await DioHelper.getData(url: 'mobara/today');
+      
       response!.data['data'].forEach((e) => {
         matches.add(MatchModel.fromJson(e)),
       });
@@ -182,11 +184,18 @@ class AppCubit extends Cubit<AppState>{
       data : {
         'zone' : val
       });
+      
       response!.data['data'].forEach((e) => {
         matches.add(MatchModel.fromJson(e)),
       });
       emit(SuccessGetMatchState());
     } catch (e) {
+      if(e is DioError){
+
+      print('==================');
+      print(e.response!.data);
+      print('==================');
+      }
       if (counterErrorGetMatch < 3) {
         getClub();
       } else {

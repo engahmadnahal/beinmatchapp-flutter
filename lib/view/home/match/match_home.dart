@@ -443,7 +443,7 @@ class _MatchHomeState extends State<MatchHome> {
                               ),
                               Flexible(
                                 child: Text(
-                                  '${match.channel} ',
+                                  '${match.channel!.channel_name} ',
                                   overflow: TextOverflow.clip,
                                   style: TextStyle(
                                       fontSize: 12,
