@@ -69,6 +69,8 @@ dependencies:
   overlay_support: ^2.0.1
   # For rename app
   rename: ^2.0.1
+  # Web View
+  webview_flutter: ^3.0.4
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

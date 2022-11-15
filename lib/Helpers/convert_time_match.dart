@@ -31,9 +31,6 @@ class ConvertTimeMatch {
       /// @return [end]
 
       /// add 2 hour to time match , because cond (when add 2 hour) less then now , this is main match end
-      print(hoursMatch);
-      print(hoursNow);
-      print((hoursMatch + 2));
       if(((hoursMatch + 2) < hoursNow) || (dayMatch < dayNow)){
         return "انتهت";
       }

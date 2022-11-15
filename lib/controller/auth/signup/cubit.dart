@@ -53,9 +53,9 @@ class SignUpCubit extends Cubit<SignUpState> {
         formKey.currentState.save();
 
         /// Get Setting App
-        var responseSetting = await DioHelper.getData(url: 'setting');
-        String dataSetting = json.encode(responseSetting!.data);
-        await SheardHelper.setData('setting', dataSetting);
+        // var responseSetting = await DioHelper.getData(url: 'setting');
+        // String dataSetting = json.encode(responseSetting!.data);
+        // await SheardHelper.setData('setting', dataSetting);
         Navigator.pushReplacement(context, MaterialPageRoute(builder:  (contenxt)=>MainLayout()));
         // Components.navigatorReplace(context: context, screen: MainLayout());
         emit(SignUpSuccess());

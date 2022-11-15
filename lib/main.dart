@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beinmatch/Helpers/DioHelper.dart';
 import 'package:beinmatch/Helpers/config.dart';
 import 'package:beinmatch/Helpers/statemangment/myblocobserver.dart';
@@ -17,11 +19,9 @@ import 'package:overlay_support/overlay_support.dart';
 import 'Helpers/end_point/api.dart';
 import 'firebase_options.dart';
 
-
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-await Firebase.initializeApp();
+  await Firebase.initializeApp();
 }
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +35,11 @@ void main() async {
   await SheardHelper.init();
 
   /// Variables
-  bool? isSkip =  SheardHelper.getBool("skipBord");
-  String? userInfo =  SheardHelper.getData("userInfo");
+  bool? isSkip = SheardHelper.getBool("skipBord");
+  String? userInfo = SheardHelper.getData("userInfo");
 
   Widget screen = OnBordingPage();
+
   /// Logic
   if (isSkip == true || isSkip != null) {
     if (userInfo != null) {
@@ -55,21 +56,19 @@ void main() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   bool isCond = isSaveMobileToken == null || isSaveMobileToken == false;
   // bool isCond = true;
-  if(isCond){
+  if (isCond) {
     messaging.getToken().then((value) async {
-      try{
-        await DioHelper.postData(url: 'notification/token-mobile', data: {
-          'token' : '$value'
-        });
-        print("Token : $value ====");
+      try {
+        await DioHelper.postData(
+            url: 'notification/token-mobile', data: {'token': '$value'});
         await SheardHelper.setBool('tokenMobiles', true);
-      }catch(e){
+      } catch (e) {
         await SheardHelper.setBool('tokenMobiles', false);
       }
     });
   }
 
-   await messaging.requestPermission(
+  await messaging.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
@@ -80,30 +79,28 @@ void main() async {
   );
 
   FirebaseMessaging.onMessage.listen((event) {
-    showSimpleNotification(
-        Text(event.data['v1']),
+    showSimpleNotification(Text(event.data['v1']),
         subtitle: Text(event.data['v2']),
         duration: Duration(seconds: 3),
         background: Color(Config.primaryColor));
-
   });
 
   // FirebaseMessaging.onMessageOpenedApp.listen((event) {
   //
   // });
 
-FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  /// End FCM Logic
 
-/// End FCM Logic
+  var responseSetting = await DioHelper.getDataWithoutToken(url: 'setting');
+  String dataSetting = json.encode(responseSetting!.data);
+  await SheardHelper.setData('setting', dataSetting);
 
   BlocOverrides.runZoned(() {
     runApp(MyApp(screen));
   }, blocObserver: myBlocObserver());
 }
-
-
-
 
 class MyApp extends StatefulWidget {
   Widget screen;
@@ -122,31 +119,32 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
   }
 
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
     bool isBackground = state == AppLifecycleState.paused;
-    bool isResumed= state == AppLifecycleState.resumed;
+    bool isResumed = state == AppLifecycleState.resumed;
 
-    if(isBackground){
-      Future(() async{
+    if (isBackground) {
+      Future(() async {
         await RequstApi.sendIsOnline(0);
       });
     }
 
-    if(isResumed){
-      Future(() async{
+    if (isResumed) {
+      Future(() async {
         await RequstApi.sendIsOnline(1);
       });
     }
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     /**
@@ -169,7 +167,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: const  [
+        supportedLocales: const [
           Locale('ar', 'AE'),
         ],
         locale: const Locale('ar', 'AE'),
@@ -182,5 +180,3 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 }
-
-

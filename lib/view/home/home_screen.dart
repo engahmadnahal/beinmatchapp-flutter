@@ -64,6 +64,15 @@ class Home extends StatelessWidget   {
                 bottom: TabBar(
                   indicatorColor: Color(Config.primaryColor),
                   tabs: [
+                    
+                    Tab(
+                      child: Text(
+                        'مباريات اليوم',
+                        style: TextStyle(
+                            color: Color(Config.primaryColor),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     Tab(
                       child: Text(
                         'أخر الأخبار',
@@ -71,14 +80,6 @@ class Home extends StatelessWidget   {
                           color: Color(Config.primaryColor),
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'مباريات اليوم',
-                        style: TextStyle(
-                            color: Color(Config.primaryColor),
-                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     Tab(
@@ -94,8 +95,8 @@ class Home extends StatelessWidget   {
               ),
               body: TabBarView(
                 children: [
-                  NewsHome(),
                   MatchHome(),
+                  NewsHome(),
                   ClubHome(),
                 ],
               ),

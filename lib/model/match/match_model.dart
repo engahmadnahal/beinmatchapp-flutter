@@ -1,7 +1,10 @@
 class MatchModel{
   int? id;
   int? botola;
+  bool? isStart;
   String? timeStart;
+  String? voice;
+  String? stadium;
   int? likes;
   int? dislikes;
   int? poll_to_club_one;
@@ -14,7 +17,7 @@ class MatchModel{
   Dawry? dawry;
   Channel? channel;
   // Comments? comments;
-  MatchModel({this.id, this.botola, this.timeStart, this.likes, this.dislikes, this.poll_to_club_one, this.poll_to_darw, this.poll_to_club_two, this.user_like_check, this.poll_user_check, this.club_one, this.club_two, this.dawry, this.channel,
+  MatchModel({this.stadium,this.voice,this.isStart,this.id, this.botola, this.timeStart, this.likes, this.dislikes, this.poll_to_club_one, this.poll_to_darw, this.poll_to_club_two, this.user_like_check, this.poll_user_check, this.club_one, this.club_two, this.dawry, this.channel,
     // this.comments
   });
   factory MatchModel.fromJson(Map<String, dynamic> json){
@@ -22,6 +25,9 @@ class MatchModel{
     return MatchModel(
       id: json['id'],
       botola: json['botola'],
+      isStart: json['isStart'],
+      voice: json['voice'],
+      stadium: json['stadium'],
       timeStart: json['timeStart'],
       likes: json['likes'],
       dislikes: json['dislikes'],

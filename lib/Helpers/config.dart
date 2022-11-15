@@ -3,10 +3,10 @@ import 'package:beinmatch/controller/onbording.dart';
 import 'package:flutter/cupertino.dart';
 
 class Config {
-  static bool isProduction = true;
+  static bool isProduction = false;
   // Setting For Api
-  static const String api_url = "https://api.bein-match.best/api/v1/";
-  // static const String api_url = "http://app.ahmadnahal.com/api/v1/";
+  // static const String api_url = "https://api.bein-match.best/api/v1/";
+  static const String api_url = "http://app.ahmadnahal.com/api/v2/";
   static const String website_url = "https://www.bein-match.best/";
 
   

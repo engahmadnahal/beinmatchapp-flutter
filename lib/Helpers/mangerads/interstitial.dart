@@ -34,7 +34,6 @@ class AdInterstitial implements IFactoryAd {
               interstitialAd = ad;
             },
             onAdFailedToLoad: (LoadAdError error) {
-              print('InterstitialAd failed to load: $error');
             },
           ));
     }

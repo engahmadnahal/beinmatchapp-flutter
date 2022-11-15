@@ -150,6 +150,7 @@ class AppCubit extends Cubit<AppState>{
   int counterErrorGetMatch = 0;
 
   void getMatch() async {
+    matches.clear();
     try{
       AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD);
       adInterstitial.loadInterstitialAd();
@@ -158,6 +159,29 @@ class AppCubit extends Cubit<AppState>{
     counterErrorGetMatch++;
     try {
       var response = await DioHelper.getData(url: 'mobara/today');
+      response!.data['data'].forEach((e) => {
+        matches.add(MatchModel.fromJson(e)),
+      });
+      emit(SuccessGetMatchState());
+    } catch (e) {
+      if (counterErrorGetMatch < 3) {
+        getClub();
+      } else {
+        await LoggerHelper.saveLog(e.toString() + " - [Class - main/cubit] - [Method - getMatch]");
+        try{emit(ErrorGetMatchState());}catch(e){}
+      }
+    }
+  }
+
+  void getMatchByTimeZone(int val) async {
+    matches.clear();
+    emit(LoadingGetMatchState());
+    counterErrorGetMatch++;
+    try {
+      var response = await DioHelper.postData(url: 'mobara/today/zone',
+      data : {
+        'zone' : val
+      });
       response!.data['data'].forEach((e) => {
         matches.add(MatchModel.fromJson(e)),
       });

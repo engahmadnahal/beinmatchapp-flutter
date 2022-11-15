@@ -15,14 +15,21 @@ import '../../../Helpers/convert_time_match.dart';
 import '../../../Helpers/mangerads/factory_manger_ads.dart';
 import '../../../Helpers/mangerads/interstitial.dart';
 
-class MatchHome extends StatelessWidget {
+class MatchHome extends StatefulWidget {
   MatchHome({Key? key}) : super(key: key);
 
   @override
+  State<MatchHome> createState() => _MatchHomeState();
+}
+
+class _MatchHomeState extends State<MatchHome> {
+  int _valueDrop = 1;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit,AppState>(
-      listener: (context,state){},
-      builder: (context,state){
+    return BlocConsumer<AppCubit, AppState>(
+      listener: (context, state) {},
+      builder: (context, state) {
         return LiquidPullToRefresh(
           color: Color(Config.primaryColor),
           springAnimationDurationInMilliseconds: 500,
@@ -31,7 +38,6 @@ class MatchHome extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             child: Container(
               color: Colors.white,
-
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Container(
@@ -42,40 +48,107 @@ class MatchHome extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Color(Config.primaryColor),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Icon(
-                                Icons.calendar_month,
-                                color: Colors.white,
-                                size: 23,
-                              ),
+                      Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Color(Config.primaryColor),
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                DateTime.now().toString().substring(0, 10),
-                                style: TextStyle(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Icon(
+                                    Icons.calendar_month,
                                     color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    size: 23,
+                                  ),
+                                ),
+                                
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    DateTime.now().toString().substring(0, 10),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          DropdownButton<int>(
+                            value: _valueDrop,
+                            items: [
+                              DropdownMenuItem(
+                                child: Text('KSA'),
+                                value: 1,
                               ),
-                            )
-                          ],
-                        ),
+                              DropdownMenuItem(
+                                child: Text('EG'),
+                                value: 2,
+                              ),
+                              DropdownMenuItem(
+                                child: Text('MA'),
+                                value: 3,
+                              ),
+                            ],
+                            onChanged: ((value) {
+                              if (value != null) {
+                                setState(() {
+                                  _valueDrop = value;
+                                  _getMatchByTimeZone(value);
+                                });
+                              }
+                            }),
+                          ),
+                        ],
                       ),
+                     
                       SizedBox(
                         height: 30,
                       ),
-                      matchList(AppCubit.get(context).matches),
+                      FutureBuilder(
+                        builder: ((context, snapshot) {
+                          if (state is LoadingGetMatchState) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Color(Config.primaryColor),
+                              ),
+                            );
+                          }
+                          return matchList(AppCubit.get(context).matches);
+                        }),
+                      ),
+                       SizedBox(
+                      height: 30,
+                    ),
+                    FactoryAds.instanc.createFactoryAd(FactoryAds.BANER_AD),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      
+                      Container(
+                        child: Text(
+                          'المباراة القادمة',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(Config.primaryColor),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                     
+                      nextMatch(),
+
                       SizedBox(
                         height: 30,
                       ),
@@ -101,8 +174,12 @@ class MatchHome extends StatelessWidget {
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return InkWell(
-                                onTap: (){
-                                  Components.navigator(context: context, screen: SingleClub(AppCubit.get(context).clubs[index].id));
+                                onTap: () {
+                                  Components.navigator(
+                                      context: context,
+                                      screen: SingleClub(AppCubit.get(context)
+                                          .clubs[index]
+                                          .id));
                                 },
                                 child: Container(
                                   height: 100,
@@ -143,15 +220,15 @@ class MatchHome extends StatelessWidget {
                             },
                             itemCount: AppCubit.get(context).clubs.length),
                       ),
+                      
                       SizedBox(
                         height: 30,
                       ),
-
-                      if(AppCubit.get(context).matches.isEmpty)
-                      Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        child: newsList(AppCubit.get(context).getPosts),
-                      ),
+                      if (AppCubit.get(context).matches.isEmpty && state is! LoadingGetMatchState)
+                        Container(
+                          width: MediaQuery.of(context).size.width - 20,
+                          child: newsList(AppCubit.get(context).getPosts),
+                        ),
                       SizedBox(
                         height: 30,
                       ),
@@ -166,17 +243,264 @@ class MatchHome extends StatelessWidget {
     );
   }
 
-
-  Widget matchList(List<MatchModel> matches){
-    if(matches.isEmpty){
+  Widget nextMatch() {
+    if(AppCubit.get(context).matches.isEmpty){
       return Container(
-
         child: Center(
-          child: Text('يبدو انه لايوجد مباريات لليوم',style: TextStyle(
-            color: Color(Config.primaryColor),
-            fontSize: 15,
-            fontWeight: FontWeight.bold
-          ),),
+          child: Text(
+            'يبدو انه لايوجد مباريات قادمة',
+            style: TextStyle(
+                color: Color(Config.primaryColor),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+      List<MatchModel> matches = AppCubit.get(context).matches;
+      MatchModel match = matches.firstWhere((e) => e.isStart == false);
+    return InkWell(
+      onTap: (){
+        Components.navigator(
+                context: context, screen: SingleMatch(match));
+      },
+      child: Container(
+        padding: EdgeInsets.all(25),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color(0xFF07499F),
+                Color(0xFF042550),
+              ],
+            )),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${match.club_one!.name} و ${match.club_two!.name}',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: FadeInImage.assetNetwork(
+                                width: 30,
+                                height: 30,
+                                fit: BoxFit.cover,
+                                placeholder: Config.placeholderImage,
+                                image: '${match.club_one!.logo}',
+                              ).image,
+                              radius: 25,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'VS',
+                              style: TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: FadeInImage.assetNetwork(
+                                width: 30,
+                                height: 30,
+                                fit: BoxFit.cover,
+                                placeholder: Config.placeholderImage,
+                                image: '${match.club_two!.logo}',
+                              ).image,
+                              radius: 25,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                              ],
+                            ),
+                          ),
+                          
+                          Row(
+                          children: [
+                            Text(
+                          '|',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          ),
+                          const SizedBox(
+                          width: 10,
+                          ),
+                          Column(
+                          children: [
+                            Text(
+                              '${match.timeStart!.split(" ")[0]}',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              '${match.timeStart!.split(" ")[1]}',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ],
+                          ),
+                        
+                          ],
+                          ),
+                          ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ],
+                  ),
+                ),
+              
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 80,
+                        child: Image.asset(
+                          'assets/imgs/logo.png',),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.mic,
+                                color: Colors.white,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Flexible(
+                                child: Text(
+                                  '${match.voice}',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 17,
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.tv,
+                                color: Colors.white,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Flexible(
+                                child: Text(
+                                  '${match.channel} ',
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 17,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.stadium,
+                              color: Colors.white,
+                              size: 17,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Flexible(
+                              child: Text(
+                                '${match.stadium} ',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget matchList(List<MatchModel> matches) {
+    if (matches.isEmpty) {
+      return Container(
+        child: Center(
+          child: Text(
+            'يبدو انه لايوجد مباريات لليوم',
+            style: TextStyle(
+                color: Color(Config.primaryColor),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+          ),
         ),
       );
     }
@@ -186,10 +510,11 @@ class MatchHome extends StatelessWidget {
       itemCount: matches.length,
       itemBuilder: (context, index) {
         return InkWell(
-          onTap: (){
-            // AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD) as AdInterstitial;
-            // adInterstitial.showInterstitialAd();
-            Components.navigator(context: context, screen: SingleMatch(matches[index]));
+          onTap: () {
+            AdInterstitial adInterstitial = FactoryAds.instanc.createFactoryAd(FactoryAds.INTERSTITIAL_AD) as AdInterstitial;
+            adInterstitial.showInterstitialAd();
+            Components.navigator(
+                context: context, screen: SingleMatch(matches[index]));
           },
           child: Components.matchesComponent(
             context: context,
@@ -197,7 +522,7 @@ class MatchHome extends StatelessWidget {
             logo2: matches[index].club_two!.logo,
             name1: matches[index].club_one!.name,
             name2: matches[index].club_two!.name,
-            statusMatch: ConvertTimeMatch.getDate(matches[index].timeStart!),
+            statusMatch: matches[index].timeStart,
           ),
         );
       },
@@ -209,17 +534,23 @@ class MatchHome extends StatelessWidget {
     );
   }
 
-  Widget newsList(List<Post> post){
+  void _getMatchByTimeZone(val) {
+    AppCubit.get(context).getMatchByTimeZone(val);
+  }
+
+  Widget newsList(List<Post> post) {
     return ListView.separated(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: post.length,
       itemBuilder: (context, index) {
         return InkWell(
-          onTap: (){
-            Components.navigator(context: context, screen: NewsSingle(
-              post: post[index],
-            ));
+          onTap: () {
+            Components.navigator(
+                context: context,
+                screen: NewsSingle(
+                  post: post[index],
+                ));
           },
           child: Components.post(
             context: context,

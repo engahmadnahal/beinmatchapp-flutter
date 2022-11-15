@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/src/chewie_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../Helpers/sheard_prefrancess.dart';
 
@@ -30,13 +31,23 @@ class VideoCubit extends Cubit<VideoState>{
     );
     getAllComment(match.id!);
     getStatusLikeUser(match.user_like_check!);
-    getVideo(match.channel!.channel_url!.urls![0]);
+    // getVideo(match.channel!.channel_url!.urls![0]);
     sendView(match.id!);
+    webViewPlayer(match.channel!.channel_url!.urls![0]);
   }
 
   /// --------------------------------- Player Widget And Controller --------------------------------
   bool isReady = false;
   var playerWidget;
+
+  void webViewPlayer(String url)  {
+
+    playerWidget =  WebView(
+      initialUrl: "https://www.youtube.com/watch?v=FrqGGw9DYfs",
+    );
+
+    isReady = true;
+  }
   /// [selectUrl] for check , and active button using toggle video url
   String selectUrl = "";
   late VideoPlayerController videoPlayerController;
@@ -51,7 +62,6 @@ class VideoCubit extends Cubit<VideoState>{
        videoPlayerController = VideoPlayerController.network(url
           ,formatHint: isM3u8 ? VideoFormat.hls : VideoFormat.other)
       ..initialize().then((_) {
-        print("Init Video ");
       });
       /// Player Controller for packge Chewie
        chewieController = ChewieController(
@@ -69,7 +79,6 @@ class VideoCubit extends Cubit<VideoState>{
       isReady = true;
       emit(SuccessVideoState());
     }catch(e){
-      print(e);
       emit(ErrorVideoState());
       isReady = false;
     }

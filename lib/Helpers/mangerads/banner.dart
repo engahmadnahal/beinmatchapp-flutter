@@ -22,7 +22,7 @@ class _BannerAdsState extends State<BannerAds> {
 
   void _createBanner(){
     myBanner = BannerAd(
-      adUnitId: "ca-app-pub-3940256099942544/6300978111",
+      adUnitId: MangerAd.instanc.banner,
       size: adSize,
       request: AdRequest(),
       listener: BannerAdListener(
@@ -30,12 +30,11 @@ class _BannerAdsState extends State<BannerAds> {
           setState(() {
             isReady = true;
           });
-          print('Ad loaded.');},
+          },
         // Called when an ad request failed.
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           // Dispose the ad here to free resources.
           ad.dispose();
-          print('Ad failed to load: $error');
         },
       ),
     );

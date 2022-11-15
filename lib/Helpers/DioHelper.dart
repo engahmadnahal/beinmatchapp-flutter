@@ -37,6 +37,20 @@ class DioHelper {
   }
 
 
+static Future<Response>? getDataWithoutToken({
+    @required String? url,
+  }) async {
+    dio!.options.headers = {
+      'Accept': 'application/json',
+    };
+    bool rConn = await checkConnection();
+    if(rConn){
+      return await dio!.get(url!);
+    }
+    throw new UnsupportedError("Connection Internet is invalid");
+  }
+
+
   static Future<Response>? getData({
     @required String? url,
   }) async {
